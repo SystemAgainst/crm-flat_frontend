@@ -1,12 +1,20 @@
 <script setup>
-import CardItem from "@/components/CardItem.vue";
+
 </script>
 
 <template>
-	<div class="card">
-		<h2 class="title">Ваши активы</h2>
-		<CardItem />
-	</div>
+	<article class="card__article">
+		<img class="card__img" src='https://images.unsplash.com/photo-1600078686889-8c42747c25fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY0NDMzMjg5Nw&ixlib=rb-1.2.1&q=80&w=400' alt='Bluetit'>
+
+		<div class="card__data">
+			<div class="card__data-upper">
+				<div class="card__title">1-к. квартира, 43 м², 19/24 эт.</div>
+				<div class="card__price">60_000 РУБ.</div>
+			</div>
+			<div class="card_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, voluptate.</div>
+			<router-link CLASS="card__btn" to="#">Подробнее</router-link>
+		</div>
+	</article>
 </template>
 
 <style scoped lang="scss">
@@ -29,7 +37,7 @@ img {
 		background-color: #efefef;
 		padding: 2rem;
 		border-radius: 2rem;
-
+		margin-bottom: 2rem;
 	}
 
 	&__data {
