@@ -1,21 +1,22 @@
 <script setup>
 
-
-import { useCardStore } from "@/store/cardStore.js";
-
-const store = useCardStore();
+import { cardData } from "@/data/cardData.js";
 </script>
 
 <template>
-	<article class="card__article">
-		<img class="card__img" src='https://images.unsplash.com/photo-1600078686889-8c42747c25fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY0NDMzMjg5Nw&ixlib=rb-1.2.1&q=80&w=400' alt='Bluetit'>
+	<article
+		class="card__article"
+		v-for="card in cardData"
+		:key="card.id"
+	>
+		<img class="card__img" :src='card.image' :alt='card.alt'>
 
 		<div class="card__data">
 			<div class="card__data-upper">
-				<div class="card__title">{{ store.getCardData.title }}</div>
-				<div class="card__price">{{ store.getCardData.price }}</div>
+				<div class="card__title">{{ card.title }}</div>
+				<div class="card__price">{{ card.price }}</div>
 			</div>
-			<div class="card_description">{{ store.getCardData.description }}</div>
+			<div class="card_description">{{ card.description }}</div>
 			<router-link CLASS="card__btn" to="#">Подробнее</router-link>
 		</div>
 	</article>
