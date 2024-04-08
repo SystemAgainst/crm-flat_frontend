@@ -1,5 +1,9 @@
 <script setup>
 
+
+import { useCardStore } from "@/store/cardStore.js";
+
+const store = useCardStore();
 </script>
 
 <template>
@@ -8,10 +12,10 @@
 
 		<div class="card__data">
 			<div class="card__data-upper">
-				<div class="card__title">1-к. квартира, 43 м², 19/24 эт.</div>
-				<div class="card__price">60_000 РУБ.</div>
+				<div class="card__title">{{ store.getCardData.title }}</div>
+				<div class="card__price">{{ store.getCardData.price }}</div>
 			</div>
-			<div class="card_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, voluptate.</div>
+			<div class="card_description">{{ store.getCardData.description }}</div>
 			<router-link CLASS="card__btn" to="#">Подробнее</router-link>
 		</div>
 	</article>
