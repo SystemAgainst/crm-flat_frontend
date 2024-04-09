@@ -1,8 +1,6 @@
 <script setup>
 import { useSidebarStore } from "@/store/index.js";
-
 import AppSidebar from "@/components/AppSidebar.vue";
-import CardList from "@/components/CardList.vue";
 
 
 const store = useSidebarStore();
@@ -11,9 +9,6 @@ const store = useSidebarStore();
 <template>
 	<AppSidebar />
 	<div class="home" :style="{ 'margin-left': store.sidebarWidth }">
-
-		<CardList />
-
 		<router-view />
 	</div>
 </template>

@@ -1,11 +1,13 @@
 <script setup>
-import CardItem from "@/components/CardItem.vue";
+import CardItem from "@/views/CardItem.vue";
+import { cardData } from "@/data/cardData.js";
 </script>
 
 <template>
 	<div class="card">
 		<h2 class="title">Ваши активы</h2>
-		<CardItem />
+
+		<CardItem :cards="cardData" />
 	</div>
 </template>
 

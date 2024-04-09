@@ -16,8 +16,7 @@ const store = useSidebarStore();
 			<span v-else>CRM FLAT</span>
 		</h1>
 
-		<SidebarLink to="/">Home</SidebarLink>
-		<SidebarLink to="/dashboard">Dashboard</SidebarLink>
+		<SidebarLink to="/">Главная</SidebarLink>
 
 		<span
 			class="collapse-icon"

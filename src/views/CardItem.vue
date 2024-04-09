@@ -1,12 +1,16 @@
 <script setup>
-
-import { cardData } from "@/data/cardData.js";
+defineProps({
+	cards: {
+		type: Array,
+		required: true,
+	}
+});
 </script>
 
 <template>
 	<article
 		class="card__article"
-		v-for="card in cardData"
+		v-for="card in cards"
 		:key="card.id"
 	>
 		<img class="card__img" :src='card.image' :alt='card.alt'>
@@ -16,8 +20,8 @@ import { cardData } from "@/data/cardData.js";
 				<div class="card__title">{{ card.title }}</div>
 				<div class="card__price">{{ card.price }}</div>
 			</div>
-			<div class="card_description">{{ card.description }}</div>
-			<router-link CLASS="card__btn" to="#">Подробнее</router-link>
+			<div class="card__description">{{ card.description }}</div>
+			<router-link class="card__btn" to="#">Подробнее</router-link>
 		</div>
 	</article>
 </template>
