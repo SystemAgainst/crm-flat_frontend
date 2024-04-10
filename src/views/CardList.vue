@@ -16,7 +16,7 @@ x скорректировать маршрутизацию: при возвра
 		<h2 class="title">Ваши активы</h2>
 
 		<article
-			class="card__article"
+			class="card__article card_margin"
 			v-for="card in cards"
 			:key="card.id"
 		>
@@ -46,6 +46,10 @@ img {
 }
 
 .card {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 
 	&__article {
 		display: flex;
@@ -54,7 +58,6 @@ img {
 		background-color: #efefef;
 		padding: 2rem;
 		border-radius: 2rem;
-		margin-bottom: 2rem;
 	}
 
 	&__data {
@@ -95,6 +98,10 @@ img {
 	&__img {
 		//width: 328px;
 		border-radius: 1.5rem;
+	}
+
+	&_margin {
+		margin-bottom: 2rem;
 	}
 }
 

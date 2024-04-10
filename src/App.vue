@@ -8,7 +8,7 @@ const store = useSidebarStore();
 
 <template>
 	<AppSidebar />
-	<div class="home" :style="{ 'margin-left': store.sidebarWidth }">
+	<div class="home container" :style="{ 'margin-left': store.sidebarWidth }">
 		<router-view />
 	</div>
 </template>
@@ -18,15 +18,12 @@ $sidebar-bg-color: #2f855a;
 $sidebar-item-hover: #38a169;
 $sidebar-item-active: #276749;
 
-.home {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 2rem;
+.container {
+	max-width: 90%;
+	margin: 0 auto;
 	padding: 0 2rem;
-	//background: hsl(187 40% 98%);
-	//background-color: white;
 }
+
+.home {}
 
 </style>
