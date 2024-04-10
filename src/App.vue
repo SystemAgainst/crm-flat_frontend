@@ -24,6 +24,7 @@ $sidebar-item-active: #276749;
 	justify-content: center;
 	align-items: center;
 	gap: 2rem;
+	padding: 0 2rem;
 	//background: hsl(187 40% 98%);
 	//background-color: white;
 }
