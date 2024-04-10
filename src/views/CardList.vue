@@ -1,13 +1,36 @@
 <script setup>
-import CardItem from "@/views/CardItem.vue";
 import { cardData } from "@/data/cardData.js";
+import { computed } from "vue";
+
+
+const cards = computed(() => cardData);
+
+/*
+TODO:
+x скорректировать маршрутизацию: при возврате с карточки товара на главную страницу путь в браузерном поиске сохраняется
+ */
 </script>
 
 <template>
 	<div class="card">
 		<h2 class="title">Ваши активы</h2>
 
-		<CardItem :cards="cardData" />
+		<article
+			class="card__article"
+			v-for="card in cards"
+			:key="card.id"
+		>
+			<img class="card__img" :src='card.image' :alt='card.alt'>
+
+			<div class="card__data">
+				<div class="card__data-upper">
+					<div class="card__title">{{ card.title }}</div>
+					<div class="card__price">{{ card.price }}</div>
+				</div>
+				<div class="card__description">{{ card.description }}</div>
+				<router-link class="card__btn" :to="`/cards/${card.id}`">Подробнее</router-link>
+			</div>
+		</article>
 	</div>
 </template>
 
@@ -31,7 +54,7 @@ img {
 		background-color: #efefef;
 		padding: 2rem;
 		border-radius: 2rem;
-
+		margin-bottom: 2rem;
 	}
 
 	&__data {

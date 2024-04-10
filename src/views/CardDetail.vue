@@ -1,4 +1,10 @@
 <script setup>
+defineProps({
+	cardId: {
+		type: String,
+		required: true,
+	},
+});
 </script>
 
 <template>
