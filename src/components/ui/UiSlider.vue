@@ -14,6 +14,19 @@ const slides = computed(() => flatImages);
 </script>
 
 <template>
+	<Carousel id="gallery" :items-to-show="1" :wrap-around="false" v-model="currentSlide">
+		<Slide v-for="slide in slides" :key="slide">
+			<picture>
+				<source :srcset="slide.src">
+				<img
+					class="carousel__item"
+					:src="slide.src"
+					:alt="slide.alt"
+				/>
+			</picture>
+		</Slide>
+	</Carousel>
+
 	<Carousel
 		id="thumbnails"
 		:items-to-show="4"
@@ -22,12 +35,14 @@ const slides = computed(() => flatImages);
 		ref="carousel"
 	>
 		<Slide v-for="slide in slides" :key="slide.id">
-			<img
-				class="carousel__item"
-				:src="slide.src"
-				:alt="slide.alt"
-				@click="slideTo(slide - 1)"
-			/>
+			<picture>
+				<source :srcset="slide.src">
+				<img
+					class="carousel__item"
+					:src="slide.src"
+					:alt="slide.alt"
+				/>
+			</picture>
 		</Slide>
 	</Carousel>
 </template>

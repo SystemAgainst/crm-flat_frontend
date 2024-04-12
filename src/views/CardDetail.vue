@@ -11,7 +11,6 @@ defineProps({
 
 <template>
 	<div class="detail">
-		<h3 class="detail__subtitle">Изображения квартиры</h3>
 		<div class="detail__carousel">
 			<UiSlider />
 		</div>
@@ -39,11 +38,18 @@ defineProps({
 
 <style scoped lang="scss">
 .detail {
-	max-height: 100vh;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: fit-content;
+	height: 100vh;
+	margin: 0 auto;
 	padding: 0 2rem;
+	gap: 4rem;
 
 	&__data {
-		width: fit-content;
+		min-width: fit-content;
+		width: 100%;
 		margin: 0 auto;
 		padding: 2rem;
 
@@ -64,7 +70,6 @@ defineProps({
 	}
 
 	&__carousel {
-		margin-bottom: 2rem;
 	}
 
 	&__upper {
