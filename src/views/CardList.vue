@@ -4,11 +4,6 @@ import { computed } from "vue";
 
 
 const cards = computed(() => cardData);
-
-/*
-TODO:
-x скорректировать маршрутизацию: при возврате с карточки товара на главную страницу путь в браузерном поиске сохраняется
- */
 </script>
 
 <template>
