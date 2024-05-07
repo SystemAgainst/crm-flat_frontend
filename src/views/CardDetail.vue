@@ -1,12 +1,19 @@
 <script setup>
+import { computed } from "vue";
 import UiSlider from "@/components/ui/UiSlider.vue";
+import { cardData } from "@/data/cardData.js";
 
-defineProps({
-	cardId: {
+const props = defineProps({
+	id: {
 		type: String,
 		required: true,
 	},
 });
+
+const cardDataId = cardData.map((card) => card.id);
+
+const cardById = computed(() => String(cardDataId) === String(props.id));
+console.log(cardById.value);
 </script>
 
 <template>
