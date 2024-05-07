@@ -1,5 +1,5 @@
 <script setup>
-import { useSidebarStore } from "@/store/index.js";
+import { useSidebarStore } from "@/store/sidebarStore.js";
 import AppSidebar from "@/components/AppSidebar.vue";
 
 

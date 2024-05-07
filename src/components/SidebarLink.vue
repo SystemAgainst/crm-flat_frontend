@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { useSidebarStore } from "@/store/index.js";
+import { useSidebarStore } from "@/store/sidebarStore.js";
 
 
 const props = defineProps({
@@ -40,15 +40,15 @@ const isActive = computed(() => route.path === props.to);
 </template>
 
 <style scoped lang="scss">
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 0.1s;
-}
-
-.fade-enter,
-.fade-leave-to {
-	opacity: 0;
-}
+//.fade-enter-active,
+//.fade-leave-active {
+//	transition: opacity 0.1s;
+//}
+//
+//.fade-enter,
+//.fade-leave-to {
+//	opacity: 0;
+//}
 
 .link {
 	display: flex;

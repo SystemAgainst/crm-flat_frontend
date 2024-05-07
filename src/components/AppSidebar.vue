@@ -1,5 +1,5 @@
 <script setup>
-import { useSidebarStore } from "@/store/index.js";
+import { useSidebarStore } from "@/store/sidebarStore.js";
 import SidebarLink from "@/components/SidebarLink.vue";
 
 
@@ -9,22 +9,16 @@ const store = useSidebarStore();
 <template>
 	<div class="sidebar" :style="{ width: store.sidebarWidth }">
 		<h1>
-      <span v-if="store.collapsed">
-        <div>C</div>
-        <div>F</div>
-      </span>
-			<span v-else>CRM FLAT</span>
+			<span>CRM FLAT</span>
 		</h1>
 
 		<SidebarLink to="/">Главная</SidebarLink>
 
-		<span
+		<div
 			class="collapse-icon"
-			:class="{ 'rotate-180': store.collapsed }"
-			@click="store.toggleSidebar()"
 		>
-			<
-    </span>
+			<span class="pi pi-user"></span>
+    </div>
 	</div>
 </template>
 
@@ -61,6 +55,7 @@ $sidebar-item-active: #276749;
 	color: (255, 255, 255, 0.7);
 
 	transition: .2s linear;
+	cursor: pointer;
 }
 
 .rotate-180 {
