@@ -60,6 +60,8 @@ watch(isTooManyAttempts, (val) => {
 		setTimeout(() => submitCount.value = 0, 2000);
 	}
 });
+
+// TODO: Вынести заголовок в отдельный ui компонент
 </script>
 
 <template>
