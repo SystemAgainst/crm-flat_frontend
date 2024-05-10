@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router';
+import { useAuthStore } from "@/store/authStore.js";
 
 
 const routes = [
@@ -38,6 +39,24 @@ const router = createRouter({
 	routes,
 	linkActiveClass: 'active',
 	linkExactActiveClass: 'active',
+});
+
+router.beforeEach((to, from, next) => {
+	const store = useAuthStore();
+
+	const isRequireAuth = to.meta.auth;
+
+	switch (true) {
+		case isRequireAuth && store.isAuthenticate:
+			next();
+			break;
+		case isRequireAuth && !store.isAuthenticate:
+			next('/auth?message=auth');
+			break;
+		default:
+			next();
+			break;
+	}
 });
 
 export default router;

@@ -17,7 +17,9 @@ const store = useSidebarStore();
 		<div
 			class="collapse-icon"
 		>
-			<span class="pi pi-user"></span>
+			<SidebarLink to="/auth">
+				<span class="pi pi-user"></span>
+			</SidebarLink>
     </div>
 	</div>
 </template>
