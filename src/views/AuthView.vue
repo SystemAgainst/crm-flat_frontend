@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store/authStore.js";
 import { useField, useForm } from "vee-validate";
 import { computed, watch } from "vue";
 import * as yup from "yup";
+import { loginUser } from "@/api/user.js";
 
 
 const store = useAuthStore();
@@ -13,10 +14,11 @@ const { handleSubmit, isSubmitting, submitCount } = useForm();
 
 const MIN_PASSWORD_LENGTH = 5;
 
-const { value: username, errorMessage: uError, handleBlur: uBlur } = useField(
-	'username',
+const { value: email, errorMessage: eError, handleBlur: eBlur } = useField(
+	'email',
 	yup
 		.string()
+		.email()
 		.trim()
 		.required()
 );
@@ -32,9 +34,9 @@ const {value: password, errorMessage: pError, handleBlur: pBlur} = useField(
 
 const onSubmit = handleSubmit(async (values) => {
 	try {
-		// const response = await authUser(values);
-		// const refresh_token = response.data.refresh;
-		// await store.login(refresh_token);
+		const response = await loginUser(values);
+		const refresh_token = response.data.token;
+		await store.login(refresh_token);
 		await router.push('/');
 	} catch (error) {
 		console.error('Ошибка аутентификации:', error);
@@ -58,12 +60,12 @@ watch(isTooManyAttempts, (val) => {
 	<form class="card" @submit.prevent="onSubmit" @keydown.enter="onSubmit">
 		<h1>Войти в систему</h1>
 
-		<div :class="['form-control', {invalid: uError}]">
+		<div :class="['form-control', {invalid: eError}]">
 			<label>
 				<span>Почта</span>
-				<input type="text" v-model="username" @blur="uBlur" />
+				<input type="text" v-model="email" @blur="eBlur" />
 			</label>
-			<small v-if="uError">{{ uError }}</small>
+			<small v-if="eError">{{ eError }}</small>
 		</div>
 
 		<div :class="['form-control', {invalid: pError}]">
