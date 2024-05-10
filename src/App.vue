@@ -1,29 +1,11 @@
 <script setup>
-import { useSidebarStore } from "@/store/sidebarStore.js";
-import AppSidebar from "@/components/AppSidebar.vue";
+import {useRoute} from "vue-router";
+import {computed} from "vue";
 
-
-const store = useSidebarStore();
+const route = useRoute();
+const layout = computed(() => route.meta?.layout);
 </script>
 
 <template>
-	<AppSidebar />
-	<div class="home container" :style="{ 'margin-left': store.sidebarWidth }">
-		<router-view />
-	</div>
+	<component :is="layout + '-layout'" />
 </template>
-
-<style scoped lang="scss">
-$sidebar-bg-color: #2f855a;
-$sidebar-item-hover: #38a169;
-$sidebar-item-active: #276749;
-
-.container {
-	max-width: 90%;
-	margin: 0 auto;
-	padding: 0 2rem;
-}
-
-.home {}
-
-</style>

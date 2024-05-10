@@ -11,8 +11,10 @@
   "dependencies": {
     "pinia": "^2.1.7",
     "primeicons": "^7.0.0",
+    "vee-validate": "^4.12.8",
     "vue": "^3.4.21",
-    "vue3-carousel": "^0.3.3"
+    "vue3-carousel": "^0.3.3",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.24.1",
