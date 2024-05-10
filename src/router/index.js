@@ -32,6 +32,15 @@ const routes = [
 			auth: false,
 		},
 	},
+	{
+		path: '/register',
+		component: () => import('@/views/RegisterView.vue'),
+		name: 'Register',
+		meta: {
+			layout: 'auth',
+			auth: false,
+		},
+	},
 ];
 
 const router = createRouter({

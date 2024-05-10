@@ -1,5 +1,5 @@
 <script setup>
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useAuthStore } from "@/store/authStore.js";
 import { useField, useForm } from "vee-validate";
 import { computed, watch } from "vue";
@@ -9,12 +9,16 @@ import { loginUser } from "@/api/user.js";
 
 const store = useAuthStore();
 const router = useRouter();
-const route = useRoute();
 
-
-const { handleSubmit, isSubmitting, submitCount } = useForm();
+const { handleSubmit, isSubmitting, submitCount } = useForm({
+	initialValues: {
+		role: "LESSOR",
+	},
+});
 
 const MIN_PASSWORD_LENGTH = 5;
+const PASSPORT_NUMBER_LENGTH = 4;
+const PASSPORT_SERIES_LENGTH = 6;
 
 const { value: email, errorMessage: eError, handleBlur: eBlur } = useField(
 	'email',
@@ -34,6 +38,44 @@ const {value: password, errorMessage: pError, handleBlur: pBlur} = useField(
 		.min(MIN_PASSWORD_LENGTH)
 );
 
+const { value: name, errorMessage: nError, handleBlur: nBlur } = useField(
+	'name',
+	yup
+		.string()
+		.trim()
+		.required()
+);
+
+const { value: last_name, errorMessage: lnError, handleBlur: lnBlur } = useField(
+	'last_name',
+	yup
+		.string()
+		.trim()
+		.required()
+);
+
+const { value: passport_num, errorMessage: pnError, handleBlur: pnBlur } = useField(
+	'passport_num',
+	yup
+		.string()
+		.trim()
+		.required()
+		.length(PASSPORT_NUMBER_LENGTH)
+		.nonNullable()
+);
+
+const { value: passport_series, errorMessage: psError, handleBlur: psBlur } = useField(
+	'passport_series',
+	yup
+		.string()
+		.trim()
+		.required()
+		.length(PASSPORT_SERIES_LENGTH)
+		.nonNullable()
+);
+
+const { value: role } = useField('role');
+
 const onSubmit = handleSubmit(async (values) => {
 	try {
 		const response = await loginUser(values);
@@ -51,8 +93,8 @@ const isTooManyAttempts = computed(() => {
 	return submitCount.value >= 3;
 });
 
-const navigateToRegister = () => {
-	router.push({ name: 'Register' });
+const navigateToLogin = () => {
+	router.push({ name: 'Auth' });
 }
 
 watch(isTooManyAttempts, (val) => {
@@ -65,11 +107,10 @@ watch(isTooManyAttempts, (val) => {
 <template>
 	<form class="card" @submit.prevent="onSubmit" @keydown.enter="onSubmit">
 		<h1>
-			<span class="title active">Войти</span>
+			<span @click.prevent="navigateToLogin()" class="title inactive">Войти</span>
 			<span class="title inactive"> / </span>
-			<span @click.prevent="navigateToRegister()" class="title inactive">Регистрация</span>
+			<span class="title active">Регистрация</span>
 		</h1>
-
 
 		<div :class="['form-control', {invalid: eError}]">
 			<label>
@@ -85,6 +126,46 @@ watch(isTooManyAttempts, (val) => {
 				<input type="password" v-model="password" @blur="pBlur">
 			</label>
 			<small v-if="pError">{{ pError }}</small>
+		</div>
+
+		<div :class="['form-control', {invalid: nError}]">
+			<label>
+				<span>Имя</span>
+				<input type="text" v-model="name" @blur="nBlur" />
+			</label>
+			<small v-if="nError">{{ nError }}</small>
+		</div>
+		<div :class="['form-control', {invalid: lnError}]">
+			<label>
+				<span>Фамилия</span>
+				<input type="text" v-model="last_name" @blur="lnBlur" />
+			</label>
+			<small v-if="lnError">{{ lnError }}</small>
+		</div>
+
+		<div class="form-control">
+			<label>
+				<span>Роль</span>
+				<select v-model="role">
+					<option value="LESSOR">Арендодатель</option>
+					<option value="RENTER">Съемщик</option>
+				</select>
+			</label>
+		</div>
+
+		<div :class="['form-control', {invalid: pnError}]">
+			<label>
+				<span>Номер паспорта</span>
+				<input type="number" v-model="passport_num" @blur="pnBlur" />
+			</label>
+			<small v-if="pnError">{{ pnError }}</small>
+		</div>
+		<div :class="['form-control', {invalid: psError}]">
+			<label>
+				<span>Серия паспорта</span>
+				<input type="number" v-model="passport_series" @blur="psBlur" />
+			</label>
+			<small v-if="psError">{{ psError }}</small>
 		</div>
 
 		<button class="btn primary" type="submit" :disabled="isSubmitting || isTooManyAttempts">Войти</button>
