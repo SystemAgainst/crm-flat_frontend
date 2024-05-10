@@ -68,7 +68,7 @@ img {
 		text-align: center;
 		padding: 1rem 1.5rem;
 		border-radius: 8px;
-		width: 5rem;
+		width: fit-content;
 		color: white;
 		transition: background-color .2s linear;
 

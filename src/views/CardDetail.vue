@@ -76,8 +76,7 @@ console.log(cardById.value);
 		font-weight: 600;
 	}
 
-	&__carousel {
-	}
+	&__carousel {}
 
 	&__upper {
 		display: flex;
