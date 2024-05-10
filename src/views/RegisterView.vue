@@ -4,7 +4,7 @@ import { useAuthStore } from "@/store/authStore.js";
 import { useField, useForm } from "vee-validate";
 import { computed, watch } from "vue";
 import * as yup from "yup";
-import { loginUser } from "@/api/user.js";
+import { registerUser } from "@/api/user.js";
 
 
 const store = useAuthStore();
@@ -54,8 +54,8 @@ const { value: last_name, errorMessage: lnError, handleBlur: lnBlur } = useField
 		.required()
 );
 
-const { value: passport_num, errorMessage: pnError, handleBlur: pnBlur } = useField(
-	'passport_num',
+const { value: passport_number, errorMessage: pnError, handleBlur: pnBlur } = useField(
+	'passport_number',
 	yup
 		.string()
 		.trim()
@@ -78,7 +78,7 @@ const { value: role } = useField('role');
 
 const onSubmit = handleSubmit(async (values) => {
 	try {
-		const response = await loginUser(values);
+		const response = await registerUser(values);
 		const refresh_token = response.data.token;
 		await store.login(refresh_token);
 		await router.push('/');
@@ -156,7 +156,7 @@ watch(isTooManyAttempts, (val) => {
 		<div :class="['form-control', {invalid: pnError}]">
 			<label>
 				<span>Номер паспорта</span>
-				<input type="number" v-model="passport_num" @blur="pnBlur" />
+				<input type="number" v-model="passport_number" @blur="pnBlur" />
 			</label>
 			<small v-if="pnError">{{ pnError }}</small>
 		</div>
@@ -168,7 +168,7 @@ watch(isTooManyAttempts, (val) => {
 			<small v-if="psError">{{ psError }}</small>
 		</div>
 
-		<button class="btn primary" type="submit" :disabled="isSubmitting || isTooManyAttempts">Войти</button>
+		<button class="btn primary" type="submit" :disabled="isSubmitting || isTooManyAttempts">Зарегистрироваться</button>
 		<div class="text-danger" v-if="isTooManyAttempts">
 			Подозрительно частые попытки войти в систему. Попробуйте позже
 		</div>
