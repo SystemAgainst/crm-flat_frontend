@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 export const useSidebarStore = defineStore('sidebar', {
 	state: () => ({
 		collapsed: false,
-		SIDEBAR_WIDTH: 180,
+		SIDEBAR_WIDTH: 300,
 		SIDEBAR_WIDTH_COLLAPSED: 38
 	}),
 	getters: {

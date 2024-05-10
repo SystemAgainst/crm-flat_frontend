@@ -13,6 +13,7 @@ const store = useSidebarStore();
 		</h1>
 
 		<SidebarLink to="/">Главная</SidebarLink>
+		<SidebarLink to="/about-user">О пользователе</SidebarLink>
 
 		<div
 			class="collapse-icon"
@@ -58,11 +59,6 @@ $sidebar-item-active: #276749;
 
 	transition: .2s linear;
 	cursor: pointer;
-}
-
-.rotate-180 {
-	transform: rotate(180deg);
-	transition: .2s linear;
 }
 
 </style>
