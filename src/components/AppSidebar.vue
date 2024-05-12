@@ -1,13 +1,15 @@
 <script setup>
 import { useSidebarStore } from "@/store/sidebarStore.js";
 import SidebarLink from "@/components/SidebarLink.vue";
+import { useAuthStore } from "@/store/authStore.js";
 
 
-const store = useSidebarStore();
+const store2 = useSidebarStore();
+const store = useAuthStore();
 </script>
 
 <template>
-	<div class="sidebar" :style="{ width: store.sidebarWidth }">
+	<div class="sidebar" :style="{ width: store2.sidebarWidth }">
 		<h1>
 			<span>CRM FLAT</span>
 		</h1>
@@ -18,9 +20,9 @@ const store = useSidebarStore();
 		<div
 			class="collapse-icon"
 		>
-			<SidebarLink to="/auth">
+			<a href="/auth" @click="store.logout()">
 				<span class="pi pi-user"></span>
-			</SidebarLink>
+			</a>
     </div>
 	</div>
 </template>

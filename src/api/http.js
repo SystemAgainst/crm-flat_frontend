@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from "@/config/index.js";
+import { useAuthStore } from "@/store/authStore.js";
 
 
 const instance = axios.create({
@@ -42,6 +43,18 @@ const patch = (uri, data = {}, requestConfig = {}) => {
 const request = (requestConfig) => {
     return instance.request(requestConfig);
 };
+
+// Перехватчик для добавления JWT токена в каждый исходящий запрос
+instance.interceptors.request.use((config) => {
+    const authStore = useAuthStore();
+    const token = authStore.getToken;
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
 
 export default {
     instance,

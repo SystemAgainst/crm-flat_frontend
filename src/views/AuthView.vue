@@ -38,6 +38,7 @@ const onSubmit = handleSubmit(async (values) => {
 	try {
 		const response = await loginUser(values);
 		const refresh_token = response.data.token;
+		console.log(refresh_token);
 		await store.login(refresh_token);
 		await router.push('/');
 	} catch (error) {

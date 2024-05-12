@@ -1,9 +1,15 @@
 <script setup>
-import { cardData } from "@/data/cardData.js";
-import { computed } from "vue";
+import { onMounted, ref } from "vue";
+import { getAllApartments } from "@/api/apartament.js";
 
 
-const cards = computed(() => cardData);
+const cards = ref([]);
+
+onMounted(async () => {
+	await getAllApartments().then((res) => {
+		cards.value = res.data;
+	});
+});
 </script>
 
 <template>
