@@ -7,7 +7,7 @@ const cards = ref([]);
 
 onMounted(async () => {
 	await getAllApartments().then((res) => {
-		cards.value = res.data;
+		cards.value = res.data.rows;
 	});
 });
 </script>
@@ -21,14 +21,14 @@ onMounted(async () => {
 			v-for="card in cards"
 			:key="card.id"
 		>
-			<img class="card__img" :src='card.image' :alt='card.alt'>
+			<img class="card__img" :src="`/static/${card.info.img}`" :alt='card.info.title'>
 
 			<div class="card__data">
 				<div class="card__data-upper">
-					<div class="card__title">{{ card.title }}</div>
-					<div class="card__price">{{ card.price }}</div>
+					<div class="card__title">{{ card.info.title }}</div>
+					<div class="card__price">{{ card.info.price }}</div>
 				</div>
-				<div class="card__description">{{ card.description }}</div>
+				<div class="card__description">{{ card.info.description }}</div>
 				<router-link class="card__btn" :to="`/cards/${card.id}`">Подробнее</router-link>
 			</div>
 		</article>
@@ -97,7 +97,7 @@ img {
 	}
 
 	&__img {
-		//width: 328px;
+		width: 328px;
 		border-radius: 1.5rem;
 	}
 
