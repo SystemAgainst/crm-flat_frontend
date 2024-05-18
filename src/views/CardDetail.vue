@@ -1,7 +1,7 @@
 <script setup>
-import { computed } from "vue";
+import { onMounted, ref } from "vue";
 import UiSlider from "@/components/ui/UiSlider.vue";
-import { cardData } from "@/data/cardData.js";
+import { getApartmentById } from "@/api/apartament.js";
 
 const props = defineProps({
 	id: {
@@ -10,11 +10,24 @@ const props = defineProps({
 	},
 });
 
-const cardDataId = cardData.map((card) => card.id);
+const card = ref({
+	info: {},
+	payments: [],
+	status: {}
+});
 
-const cardById = computed(() => String(cardDataId) === String(props.id));
-console.log(cardById.value);
+onMounted(async () => {
+	await getApartmentById(props.id).then((res) => {
+		console.log(res.data.payments.map((item) => item.is_paid));
+		card.value = {
+			info: res.data.info,
+			payments: res.data.payments,
+			status: res.data.status
+		};
+	});
+});
 </script>
+
 
 <template>
 	<div class="detail">
@@ -23,25 +36,25 @@ console.log(cardById.value);
 		</div>
 		<div class="detail__data">
 			<div class="detail__upper">
-				<h3 class="detail__subtitle">1-к. квартира, 43 м², 19/24 эт.</h3>
-				<h3 class="detail__subtitle">60_000 руб/мес</h3>
+				<h3 class="detail__subtitle"> {{ card.info.title }} </h3>
+				<h3 class="detail__subtitle"> {{ card.info.cost }} руб/мес</h3>
 			</div>
 			<h3 class="detail__subtitle">О квартире</h3>
 			<div class="detail__description">
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, voluptate
+				{{ card.info.description }}
 			</div>
-			<h3 class="detail__subtitle">Дата оплаты</h3>
+			<h3 class="detail__subtitle">Статус квартиры</h3>
 			<div class="detail__description">
-				Каждое 4 число месяца
+				{{ card.status.status }}
 			</div>
 			<h3 class="detail__subtitle">Статус оплаты</h3>
 			<div class="detail__description">
-				Оплачено
+				{{ card.payments.map((item) => item.is_paid).join(", ") }}
 			</div>
 		</div>
-		<!-- /.detail__data -->
 	</div>
 </template>
+
 
 <style scoped lang="scss">
 .detail {
