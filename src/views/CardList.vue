@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { getAllApartments } from "@/api/apartament.js";
+import { BACKEND_HOST } from "@/data/constants.js";
 
 
 const cards = ref([]);
@@ -21,7 +22,7 @@ onMounted(async () => {
 			v-for="card in cards"
 			:key="card.id"
 		>
-			<img class="card__img" :src="`/static/${card.info.img}`" :alt='card.info.title'>
+			<img class="card__img" :src="`${BACKEND_HOST}/${card.info.img}`" :alt='card.info.title'>
 
 			<div class="card__data">
 				<div class="card__data-upper">
