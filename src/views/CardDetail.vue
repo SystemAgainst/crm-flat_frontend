@@ -16,14 +16,18 @@ const card = ref({
 	status: {}
 });
 
+const paymentStatus = ref("NOT_PAID");
+const status = ref("");
+
 onMounted(async () => {
 	await getApartmentById(props.id).then((res) => {
-		console.log(res.data.payments.map((item) => item.is_paid));
 		card.value = {
 			info: res.data.info,
 			payments: res.data.payments,
 			status: res.data.status
 		};
+		paymentStatus.value = res.data.payments.length > 0 ? res.data.payments[0].is_paid : 'NOT_PAID';
+		status.value = res.data.status.status;
 	});
 });
 </script>
@@ -45,11 +49,23 @@ onMounted(async () => {
 			</div>
 			<h3 class="detail__subtitle">Статус квартиры</h3>
 			<div class="detail__description">
-				{{ card.status.status }}
+				<label>
+					<select v-model="status">
+						<option value="available">Свободно</option>
+						<option value="booked">Занято</option>
+						<option value="maintenance">Ремонт</option>
+						<option value="unavailable">Не доступно</option>
+					</select>
+				</label>
 			</div>
 			<h3 class="detail__subtitle">Статус оплаты</h3>
 			<div class="detail__description">
-				{{ card.payments.map((item) => item.is_paid).join(", ") }}
+				<label>
+					<select v-model="paymentStatus">
+						<option value="PAID">Оплачено</option>
+						<option value="NOT_PAID">Не оплачено</option>
+					</select>
+				</label>
 			</div>
 		</div>
 	</div>
