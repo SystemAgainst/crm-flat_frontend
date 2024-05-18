@@ -1,8 +1,10 @@
 <script setup>
-import { computed, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { Carousel, Slide } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
-import { flatImages } from "@/data/flatImages.js";
+import { getApartmentById } from "@/api/apartament.js";
+import { useRoute } from "vue-router";
+import { BACKEND_HOST } from "@/data/constants.js";
 
 
 const currentSlide = ref(0);
@@ -10,18 +12,26 @@ const slideTo = (val) => {
 	currentSlide.value = val;
 };
 
-const slides = computed(() => flatImages);
+const route = useRoute();
+
+const slides2 = ref([]);
+
+onMounted(async () => {
+	await getApartmentById(route.params.id).then((res) => {
+		slides2.value = [`${BACKEND_HOST}/${res.data.info.img}`];
+	});
+});
 </script>
 
 <template>
 	<Carousel id="gallery" :items-to-show="1" :wrap-around="false" v-model="currentSlide">
-		<Slide v-for="slide in slides" :key="slide">
+		<Slide v-for="(slide, idx) in slides2" :key="idx">
 			<picture>
-				<source :srcset="slide.src">
+				<source :srcset="slide">
 				<img
 					class="carousel__item"
-					:src="slide.src"
-					:alt="slide.alt"
+					:src="slide"
+					:alt="slide"
 				/>
 			</picture>
 		</Slide>
@@ -34,13 +44,13 @@ const slides = computed(() => flatImages);
 		v-model="currentSlide"
 		ref="carousel"
 	>
-		<Slide v-for="slide in slides" :key="slide.id">
+		<Slide v-for="(slide, idx) in slides2" :key="idx">
 			<picture>
-				<source :srcset="slide.src">
+				<source :srcset="slide">
 				<img
 					class="carousel__item"
-					:src="slide.src"
-					:alt="slide.alt"
+					:src="slide"
+					:alt="slide"
 				/>
 			</picture>
 		</Slide>
