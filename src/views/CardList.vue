@@ -78,6 +78,8 @@ img {
 		width: fit-content;
 		color: white;
 		transition: background-color .2s linear;
+		cursor: pointer;
+		border: none;
 
 		&:hover,
 		&:active,

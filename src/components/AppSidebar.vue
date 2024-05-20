@@ -14,14 +14,21 @@ const store = useAuthStore();
 			<span>CRM FLAT</span>
 		</h1>
 
-		<SidebarLink to="/">Главная</SidebarLink>
-		<SidebarLink to="/about-user">О пользователе</SidebarLink>
+		<SidebarLink to="/">
+			Главная
+		</SidebarLink>
+		<SidebarLink to="/create-apartment">
+			Создать апартемент
+		</SidebarLink>
+		<SidebarLink to="/about-user">
+			О пользователе
+		</SidebarLink>
 
 		<div
 			class="collapse-icon"
 		>
 			<a href="/auth" @click="store.logout()">
-				<span class="pi pi-user"></span>
+				<span class="pi pi-sign-out" style="color: white"></span>
 			</a>
     </div>
 	</div>

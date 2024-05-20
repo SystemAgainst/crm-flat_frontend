@@ -14,6 +14,15 @@ const routes = [
 		},
 	},
 	{
+		path: '/create-apartment',
+		name: 'create',
+		component: () => import('@/views/CardCreate.vue'),
+		meta: {
+			layout: 'main',
+			auth: true,
+		},
+	},
+	{
 		path: '/cards/:id',
 		name: 'card',
 		props: true,

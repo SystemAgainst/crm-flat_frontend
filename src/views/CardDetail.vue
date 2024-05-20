@@ -91,7 +91,8 @@ onMounted(async () => {
 
 		background-color: #f1f1f1;
 		border-radius: 1rem;
-		box-shadow: 12px 12px 2px 1px rgb(105, 166, 131);	}
+		box-shadow: 12px 12px 2px 1px rgb(105, 166, 131);
+	}
 
 	&__title {
 		font-size: 1.25rem;
