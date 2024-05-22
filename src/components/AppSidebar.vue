@@ -20,7 +20,7 @@ const store = useAuthStore();
 		<SidebarLink to="/create-apartment">
 			Создать апартемент
 		</SidebarLink>
-		<SidebarLink to="/about-user">
+		<SidebarLink to="/lessor-data">
 			О пользователе
 		</SidebarLink>
 

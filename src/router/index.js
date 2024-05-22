@@ -33,6 +33,24 @@ const routes = [
 		},
 	},
 	{
+		path: '/lessor-data',
+		component: () => import('@/views/LessorPersonalData.vue'),
+		name: 'LessorPersonalData',
+		meta: {
+			layout: 'main',
+			auth: true,
+		},
+	},
+	{
+		path: '/renter-data',
+		component: () => import('@/views/RenterPersonalData.vue'),
+		name: 'RenterPersonalData',
+		meta: {
+			layout: 'main',
+			auth: true,
+		},
+	},
+	{
 		path: '/auth',
 		component: () => import('@/views/AuthView.vue'),
 		name: 'Auth',
