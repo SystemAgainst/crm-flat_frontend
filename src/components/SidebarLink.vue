@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { useSidebarStore } from "@/store/sidebarStore.js";
 
 
 const props = defineProps({
@@ -17,10 +16,7 @@ const props = defineProps({
 	},
 });
 
-
-const store = useSidebarStore();
 const route = useRoute();
-
 const isActive = computed(() => route.path === props.to);
 </script>
 
@@ -30,25 +26,24 @@ const isActive = computed(() => route.path === props.to);
 		class="link"
 		:class="{ 'active': isActive}"
 	>
-		<i class="icon" :class="icon" />
-		<transition name="fade">
-      <span v-if="!store.collapsed">
-        <slot />
-      </span>
-		</transition>
+		<slot />
 	</router-link>
 </template>
 
 <style scoped lang="scss">
-//.fade-enter-active,
-//.fade-leave-active {
-//	transition: opacity 0.1s;
-//}
-//
-//.fade-enter,
-//.fade-leave-to {
-//	opacity: 0;
-//}
+$sidebar-bg-color: #2f855a;
+$sidebar-item-hover: #38a169;
+$sidebar-item-active: #276749;
+
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.1s;
+}
+
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
+}
 
 .link {
 	display: flex;
@@ -59,26 +54,29 @@ const isActive = computed(() => route.path === props.to);
 	font-weight: 400;
 	user-select: none;
 
-	margin: 0.1em 0;
-	padding: 0.4em;
-	border-radius: 0.25em;
-	height: 1.5em;
+	margin: 0.25em 0;
+
+	border-radius: 8px;
+	padding: 15px 20px;
+	line-height: 1.5;
 
 	color: white;
 	text-decoration: none;
+
+	text-align: right;
 }
 
 .link:hover {
-	background-color: var(--sidebar-item-hover);
+	background-color: $sidebar-item-active;
 }
 
 .link.active {
-	background-color: var(--sidebar-item-active);
+	background-color: $sidebar-item-hover;
 }
 
-.link .icon {
-	flex-shrink: 0;
-	width: 25px;
-	margin-right: 10px;
-}
+//.link .icon {
+//	flex-shrink: 0;
+//	width: 25px;
+//	margin-right: 10px;
+//}
 </style>

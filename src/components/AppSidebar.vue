@@ -4,14 +4,13 @@ import SidebarLink from "@/components/SidebarLink.vue";
 import { useAuthStore } from "@/store/authStore.js";
 
 
-const store2 = useSidebarStore();
 const store = useAuthStore();
 </script>
 
 <template>
-	<div class="sidebar" :style="{ width: store2.sidebarWidth }">
+	<div class="sidebar">
 		<h1>
-			<span>CRM FLAT</span>
+			<span class="sidebar__logo">RentApp</span>
 		</h1>
 
 		<SidebarLink to="/">
@@ -22,6 +21,9 @@ const store = useAuthStore();
 		</SidebarLink>
 		<SidebarLink to="/lessor-data">
 			О пользователе
+		</SidebarLink>
+		<SidebarLink to="/docs">
+			Документы
 		</SidebarLink>
 
 		<div
@@ -49,13 +51,15 @@ $sidebar-item-active: #276749;
 	display: flex;
 	flex-direction: column;
 	float: left;
-	padding: .5rem;
+	padding: 1rem 2rem;
 
 	color: white;
 
 	background-color: $sidebar-bg-color;
 
 	transition: .3s ease;
+
+	text-align: center;
 }
 
 .collapse-icon {
@@ -69,5 +73,4 @@ $sidebar-item-active: #276749;
 	transition: .2s linear;
 	cursor: pointer;
 }
-
 </style>

@@ -51,6 +51,15 @@ const routes = [
 		},
 	},
 	{
+		path: '/docs',
+		component: () => import('@/views/DocumentView.vue'),
+		name: 'Documents',
+		meta: {
+			layout: 'main',
+			auth: true,
+		},
+	},
+	{
 		path: '/auth',
 		component: () => import('@/views/AuthView.vue'),
 		name: 'Auth',
