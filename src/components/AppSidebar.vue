@@ -1,5 +1,4 @@
 <script setup>
-import { useSidebarStore } from "@/store/sidebarStore.js";
 import SidebarLink from "@/components/SidebarLink.vue";
 import { useAuthStore } from "@/store/authStore.js";
 
