@@ -42,6 +42,7 @@ onMounted(async () => {
 		<div v-if="pending">Загрузка...</div>
 		<template v-else>
 			<div class="detail__carousel">
+				<router-link class="back-btn" to="/">Назад</router-link>
 				<UiSlider />
 			</div>
 			<div class="detail__data">
@@ -80,6 +81,10 @@ onMounted(async () => {
 
 
 <style scoped lang="scss">
+$sidebar-bg-color: #2f855a;
+$sidebar-item-hover: #38a169;
+$sidebar-item-active: #276749;
+
 .detail {
 	display: flex;
 	flex-direction: row;
@@ -120,5 +125,10 @@ onMounted(async () => {
 		justify-content: space-between;
 		align-items: center;
 	}
+}
+
+.back-btn {
+	color: $sidebar-bg-color;
+	text-decoration: none;
 }
 </style>
