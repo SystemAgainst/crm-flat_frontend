@@ -3,13 +3,16 @@ import { onMounted, ref } from "vue";
 import { getAllApartments } from "@/api/apartament.js";
 import { BACKEND_HOST } from "@/data/constants.js";
 
-
 const cards = ref([]);
+const pending = ref(true);
 
 onMounted(async () => {
-	await getAllApartments().then((res) => {
-		cards.value = res.data.rows;
-	});
+	setTimeout(async () => {
+		await getAllApartments().then((res) => {
+			cards.value = res.data.rows;
+			pending.value = false;
+		});
+	}, 500);
 });
 </script>
 
@@ -17,22 +20,27 @@ onMounted(async () => {
 	<div class="card">
 		<h2 class="title">Ваши активы</h2>
 
-		<article
-			class="card__article card_margin"
-			v-for="card in cards"
-			:key="card.id"
-		>
-			<img class="card__img" :src="`${BACKEND_HOST}/${card.info.img}`" :alt='card.info.title'>
+		<div v-if="pending">Загрузка...</div>
 
-			<div class="card__data">
-				<div class="card__data-upper">
-					<div class="card__title">{{ card.info.title }}</div>
-					<div class="card__price">{{ card.info.price }}</div>
+		<template v-else>
+			<article
+				class="card__article card_margin"
+				v-for="card in cards"
+				:key="card.id"
+				:card="card"
+			>
+				<img class="card__img" :src="`${BACKEND_HOST}/${card.info.img}`" :alt="card.info.title" />
+
+				<div class="card__data">
+					<div class="card__data-upper">
+						<div class="card__title">{{ card.info.title }}</div>
+						<div class="card__price">{{ card.info.price }}</div>
+					</div>
+					<div class="card__description">{{ card.info.description }}</div>
+					<router-link class="card__btn" :to="`/cards/${card.id}`">Подробнее</router-link>
 				</div>
-				<div class="card__description">{{ card.info.description }}</div>
-				<router-link class="card__btn" :to="`/cards/${card.id}`">Подробнее</router-link>
-			</div>
-		</article>
+			</article>
+		</template>
 	</div>
 </template>
 
@@ -50,7 +58,6 @@ img {
 .card {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
 
 	&__article {
@@ -60,6 +67,8 @@ img {
 		background-color: #efefef;
 		padding: 2rem;
 		border-radius: 2rem;
+
+		width: 700px;
 	}
 
 	&__data {
@@ -77,7 +86,7 @@ img {
 		border-radius: 8px;
 		width: fit-content;
 		color: white;
-		transition: background-color .2s linear;
+		transition: background-color 0.2s linear;
 		cursor: pointer;
 		border: none;
 
@@ -108,5 +117,4 @@ img {
 		margin-bottom: 2rem;
 	}
 }
-
 </style>
