@@ -118,8 +118,6 @@ $sidebar-item-active: #276749;
 		font-weight: 600;
 	}
 
-	&__carousel {}
-
 	&__upper {
 		display: flex;
 		justify-content: space-between;
