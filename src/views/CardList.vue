@@ -12,7 +12,7 @@ onMounted(async () => {
 			cards.value = res.data.rows;
 			pending.value = false;
 		});
-	}, 500);
+	}, 300);
 });
 </script>
 
