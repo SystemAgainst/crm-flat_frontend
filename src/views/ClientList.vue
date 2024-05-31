@@ -5,22 +5,35 @@ import { BACKEND_HOST } from "@/data/constants.js";
 
 const cards = ref([]);
 const pending = ref(true);
+const isCardsEmpty = ref(false);
 
 onMounted(async () => {
 	setTimeout(async () => {
-		await getAllApartments().then((res) => {
-			cards.value = res.data.rows;
+		try {
+			const res = await getAllApartments();
 			pending.value = false;
-		});
+			if (res.data.length <= 0) {
+				isCardsEmpty.value = true;
+			} else {
+				isCardsEmpty.value = false;
+				cards.value = res.data.rows;
+			}
+		} catch (error) {
+			console.error("Ошибка при получении данных:", error);
+			pending.value = false;
+			isCardsEmpty.value = true;
+		}
 	}, 300);
 });
 </script>
 
 <template>
 	<div class="card">
-		<h2 class="title">Ваши клиенты</h2>
+		<h2 class="title">Ваши активы</h2>
 
 		<div v-if="pending">Загрузка...</div>
+
+		<div v-else-if="isCardsEmpty">Данных пока нет</div>
 
 		<template v-else>
 			<article
