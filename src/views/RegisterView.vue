@@ -148,7 +148,6 @@ watch(isTooManyAttempts, (val) => {
 				<span>Роль</span>
 				<select v-model="role">
 					<option value="LESSOR">Арендодатель</option>
-					<option value="RENTER">Съемщик</option>
 				</select>
 			</label>
 		</div>
