@@ -77,6 +77,26 @@ const routes = [
 			auth: false,
 		},
 	},
+	{
+		path: '/list-renter',
+		alias: '/list-renter',
+		name: 'RenterList',
+		component: () => import('@/views/ClientList.vue'),
+		meta: {
+			layout: 'main',
+			auth: true,
+		},
+	},
+	{
+		path: '/create-renter',
+		alias: '/create-renter',
+		name: 'CreateClient',
+		component: () => import('@/views/ClientCreate.vue'),
+		meta: {
+			layout: 'main',
+			auth: true,
+		},
+	},
 ];
 
 const router = createRouter({

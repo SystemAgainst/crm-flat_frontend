@@ -1,14 +1,74 @@
 <script setup>
+import { ref } from "vue";
+import { useAuthStore } from "@/store/authStore.js";
+import { storeToRefs } from "pinia";
+import VueJwtDecode from 'vue-jwt-decode';
+import { useRouter } from "vue-router";
+import axios from "axios";
+import config from "@/config/index.js";
+
+
+const router = useRouter();
+
+const authStore = useAuthStore();
+const { token } = storeToRefs((authStore));
+
+const decodedUserToken = VueJwtDecode.decode(token.value);
+
+const cardData = ref({
+	title: "",
+	description: "",
+	address: "",
+	square: null,
+	"room_count": null,
+	cost: null,
+	img: null,
+	user_id: decodedUserToken.id,
+});
+
+const handleImageUpload = (event) => {
+	const file = event.target.files[0];
+	if (file) {
+		cardData.value.img = file;
+	}
+};
+
+const createCard = async (data) => {
+	try	{
+		console.log("Creating card with data:", data);
+
+		const formData = new FormData();
+		formData.append('title', data.title);
+		formData.append('description', data.description);
+		formData.append('address', data.address);
+		formData.append('square', data.square);
+		formData.append('room_count', data.room_count);
+		formData.append('cost', data.cost);
+		formData.append('user_id', data.user_id);
+		formData.append('img', data.img);  // Append the image file
+
+		await axios.post('/apartment/create', formData, {
+			baseURL: config.apiBaseURI,
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		});
+
+		await router.push("/");
+	} catch (error) {
+		console.error(error);
+	}
+};
 
 </script>
 
 <template>
-	<div class="lessor-pd">
-		<h1>Lessor personal data</h1>
+	<div class="create">
 		<form @submit.prevent="createCard(cardData)" @keydown.enter="createCard(cardData)">
-			<h3>Создание апартамента</h3>
+			<h3>Создание клиента</h3>
 			<div class="form__control">
 				<input
+					v-model="cardData.title"
 					class="form__input"
 					type="text"
 					placeholder="1-к. квартира, 43 м², 19/24 эт."
@@ -16,6 +76,7 @@
 			</div>
 			<div class="form__control">
 				<input
+					v-model="cardData.description"
 					class="form__input"
 					type="text"
 					placeholder="Описание"
@@ -23,6 +84,7 @@
 			</div>
 			<div class="form__control">
 				<input
+					v-model="cardData.address"
 					class="form__input"
 					type="text"
 					placeholder="Адрес"
@@ -30,6 +92,7 @@
 			</div>
 			<div class="form__control">
 				<input
+					v-model="cardData.square"
 					class="form__input"
 					type="number"
 					placeholder="Площадь в кв.м"
@@ -37,6 +100,7 @@
 			</div>
 			<div class="form__control">
 				<input
+					v-model="cardData.room_count"
 					class="form__input"
 					type="number"
 					placeholder="Кол-во комнат"
@@ -44,15 +108,30 @@
 			</div>
 			<div class="form__control">
 				<input
+					v-model="cardData.cost"
 					class="form__input"
 					type="number"
 					placeholder="Арендная плата"
 				/>
 			</div>
+			<div class="form__control">
+				<input
+					class="form__input"
+					type="file"
+					@change="handleImageUpload"
+				/>
+			</div>
 			<button class="form__btn">Создать</button>
 		</form>
+		<div v-if="cardData.img" class="preview">
+			<h4>Предварительный просмотр изображения:</h4>
+			<img
+				:src="cardData.img"
+				alt="Preview"
+				class="preview__image"
+			/>
+		</div>
 	</div>
-	
 </template>
 
 <style scoped lang="scss">
@@ -60,7 +139,7 @@ $sidebar-bg-color: #2f855a;
 $sidebar-item-hover: #38a169;
 $sidebar-item-active: #276749;
 
-.lessor-pd {
+.create {
 	max-width: 1200px;
 	margin: 0 auto;
 	padding: 2rem;
