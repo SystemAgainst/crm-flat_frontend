@@ -81,10 +81,10 @@ const onSubmit = handleSubmit(async (values) => {
 		const response = await registerUser(values);
 		const refresh_token = response.data.token;
 		await store.login(refresh_token);
-		await router.push('/');
+		await router.push('/list-renter');
 	} catch (error) {
 		console.error('Ошибка аутентификации:', error);
-		await router.push('/auth');
+		await router.push('/create-renter');
 	}
 });
 
@@ -92,10 +92,6 @@ const onSubmit = handleSubmit(async (values) => {
 const isTooManyAttempts = computed(() => {
 	return submitCount.value >= 3;
 });
-
-const navigateToLogin = () => {
-	router.push({ name: 'Auth' });
-}
 
 watch(isTooManyAttempts, (val) => {
 	if (val) {
@@ -165,7 +161,7 @@ watch(isTooManyAttempts, (val) => {
 			<small v-if="psError">{{ psError }}</small>
 		</div>
 
-		<button class="btn primary" type="submit" :disabled="isSubmitting || isTooManyAttempts">Зарегистрироваться</button>
+		<button class="btn primary" type="submit" :disabled="isSubmitting || isTooManyAttempts">Создать клиента</button>
 		<div class="text-danger" v-if="isTooManyAttempts">
 			Подозрительно частые попытки войти в систему. Попробуйте позже
 		</div>
