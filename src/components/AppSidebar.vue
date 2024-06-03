@@ -15,15 +15,17 @@ const store = useAuthStore();
 		<SidebarLink to="/">
 			Главная
 		</SidebarLink>
+		<SidebarLink to="/list-renter">
+			Список клиентов
+		</SidebarLink>
+		<br>
 		<SidebarLink to="/create-apartment">
 			Создать апартемент
 		</SidebarLink>
 		<SidebarLink to="/create-renter">
 			Завести съемщика
 		</SidebarLink>
-		<SidebarLink to="/list-renter">
-			Список клиентов
-		</SidebarLink>
+		<br>
 		<SidebarLink to="/docs">
 			Документы
 		</SidebarLink>
