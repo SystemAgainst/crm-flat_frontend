@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import UiSlider from "@/components/ui/UiSlider.vue";
 import { getApartmentById } from "@/api/apartament.js";
 
 const props = defineProps({
