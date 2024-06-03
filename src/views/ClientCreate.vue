@@ -4,7 +4,7 @@ import { useAuthStore } from "@/store/authStore.js";
 import { useField, useForm } from "vee-validate";
 import { computed, watch } from "vue";
 import * as yup from "yup";
-import { registerUser } from "@/api/user.js";
+import { registerUser } from "@/api/lessor.js";
 
 
 const store = useAuthStore();
