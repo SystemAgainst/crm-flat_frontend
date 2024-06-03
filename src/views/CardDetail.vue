@@ -10,28 +10,29 @@ const props = defineProps({
 	},
 });
 
-const card = ref({
-	info: {},
-	payments: [],
-	status: {}
-});
-
-const paymentStatus = ref("NOT_PAID");
-const status = ref("");
+const card = ref();
 const pending = ref(true);
+const isCardsEmpty = ref(false);
+const status = ref("");
 
 onMounted(async () => {
 	setTimeout(async () => {
-		await getApartmentById(props.id).then((res) => {
-			card.value = {
-				info: res.data.info,
-				payments: res.data.payments,
-				status: res.data.status
-			};
-			paymentStatus.value = res.data.payments.length > 0 ? res.data.payments[0].is_paid : 'NOT_PAID';
-			status.value = res.data.status.status;
+		try	{
+			const res = await getApartmentById(props.id);
 			pending.value = false;
-		});
+
+			if (res.data.length <= 0) {
+				isCardsEmpty.value = true;
+			} else {
+				isCardsEmpty.value = false;
+				card.value = res.data;
+			}
+			console.log(res.data);
+		} catch (error) {
+			console.error("Ошибка при получении данных:", error);
+			pending.value = false;
+			isCardsEmpty.value = true;
+		}
 	}, 500);
 });
 </script>
@@ -43,16 +44,15 @@ onMounted(async () => {
 		<template v-else>
 			<div class="detail__carousel">
 				<router-link class="back-btn" to="/">Назад</router-link>
-				<UiSlider />
 			</div>
 			<div class="detail__data">
 				<div class="detail__upper">
-					<h3 class="detail__subtitle"> {{ card.info.title }} </h3>
-					<h3 class="detail__subtitle"> {{ card.info.cost }} руб/мес</h3>
+					<h3 class="detail__subtitle"> {{ card.title }} </h3>
+					<h3 class="detail__subtitle"> {{ card.cost }} руб/мес</h3>
 				</div>
 				<h3 class="detail__subtitle">О квартире</h3>
 				<div class="detail__description">
-					{{ card.info.description }}
+					{{ card.description }}
 				</div>
 				<h3 class="detail__subtitle">Статус квартиры</h3>
 				<div class="detail__description">
@@ -86,14 +86,14 @@ $sidebar-item-hover: #38a169;
 $sidebar-item-active: #276749;
 
 .detail {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
 	width: fit-content;
 	height: 100vh;
-	margin: 0 auto;
+	margin: auto;
 	padding: 0 2rem;
-	gap: 4rem;
+
+	&__carousel {
+		margin: 2rem auto;
+	}
 
 	&__data {
 		min-width: fit-content;

@@ -14,8 +14,6 @@
     "primeicons": "^7.0.0",
     "vee-validate": "^4.12.8",
     "vue": "^3.4.21",
-    "vue-jwt-decode": "^0.1.0",
-    "vue3-carousel": "^0.3.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {
