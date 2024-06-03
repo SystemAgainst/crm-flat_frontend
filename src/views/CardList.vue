@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { getAllApartments } from "@/api/apartament.js";
-import { BACKEND_HOST } from "@/data/constants.js";
 
 const cards = ref([]);
 const pending = ref(true);
@@ -12,7 +11,7 @@ onMounted(async () => {
 		try {
 			const res = await getAllApartments();
 			pending.value = false;
-			if (res.data.length <= 0) {
+			if (res.data.rows.length <= 0) {
 				isCardsEmpty.value = true;
 			} else {
 				isCardsEmpty.value = false;
@@ -42,14 +41,14 @@ onMounted(async () => {
 				:key="card.id"
 				:card="card"
 			>
-				<img class="card__img" :src="`${BACKEND_HOST}/${card.info.img}`" :alt="card.info.title" />
+				<img class="card__img" src="/static/mockFlatImage.webp" :alt="card.title" />
 
 				<div class="card__data">
 					<div class="card__data-upper">
-						<div class="card__title">{{ card.info.title }}</div>
-						<div class="card__price">{{ card.info.price }}</div>
+						<div class="card__title">{{ card.title }}</div>
+						<div class="card__price">{{ card.cost }}</div>
 					</div>
-					<div class="card__description">{{ card.info.description }}</div>
+					<div class="card__description">{{ card.description }}</div>
 					<router-link class="card__btn" :to="`/cards/${card.id}`">Подробнее</router-link>
 				</div>
 			</article>
