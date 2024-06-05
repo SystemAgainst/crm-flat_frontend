@@ -4,7 +4,7 @@ import { useAuthStore } from "@/store/authStore.js";
 
 const routes = [
 	{
-		path: '/cards',
+		path: '/apartments',
 		alias: '/',
 		name: 'home',
 		component: () => import('@/views/CardList.vue'),
@@ -23,8 +23,8 @@ const routes = [
 		},
 	},
 	{
-		path: '/cards/:id',
-		name: 'card',
+		path: '/apartment/:id',
+		name: 'apartment',
 		props: true,
 		component: () => import('@/views/CardDetail.vue'),
 		meta: {
