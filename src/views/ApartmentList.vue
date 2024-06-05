@@ -49,7 +49,7 @@ onMounted(async () => {
 						<div class="card__price">{{ card.cost }}</div>
 					</div>
 					<div class="card__description">{{ card.description }}</div>
-					<router-link class="card__btn" :to="`/cards/${card.id}`">Подробнее</router-link>
+					<router-link class="card__btn" :to="`/apartments/${card.id}`">Подробнее</router-link>
 				</div>
 			</article>
 		</template>

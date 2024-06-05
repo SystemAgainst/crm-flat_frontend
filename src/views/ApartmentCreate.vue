@@ -4,8 +4,7 @@ import { useAuthStore } from "@/store/authStore.js";
 import { storeToRefs } from "pinia";
 import VueJwtDecode from 'vue-jwt-decode';
 import { useRouter } from "vue-router";
-import axios from "axios";
-import config from "@/config/index.js";
+import { create } from "@/api/apartament.js";
 
 
 const router = useRouter();
@@ -19,40 +18,17 @@ const cardData = ref({
 	title: "",
 	description: "",
 	address: "",
-	square: null,
+	square: "",
 	"room_count": null,
 	cost: null,
-	img: null,
-	user_id: decodedUserToken.id,
+	lessor_id: decodedUserToken.id,
 });
 
-const handleImageUpload = (event) => {
-	const file = event.target.files[0];
-	if (file) {
-		cardData.value.img = file;
-	}
-};
 
-const createCard = async (data) => {
+
+const createCard = async () => {
 	try	{
-		console.log("Creating card with data:", data);
-
-		const formData = new FormData();
-		formData.append('title', data.title);
-		formData.append('description', data.description);
-		formData.append('address', data.address);
-		formData.append('square', data.square);
-		formData.append('room_count', data.room_count);
-		formData.append('cost', data.cost);
-		formData.append('user_id', data.user_id);
-		formData.append('img', data.img);  // Append the image file
-
-		await axios.post('/apartment/create', formData, {
-			baseURL: config.apiBaseURI,
-			headers: {
-				'Content-Type': 'multipart/form-data'
-			}
-		});
+		await create(cardData.value);
 
 		await router.push("/");
 	} catch (error) {
@@ -64,7 +40,7 @@ const createCard = async (data) => {
 
 <template>
 	<div class="create">
-		<form @submit.prevent="createCard(cardData)" @keydown.enter="createCard(cardData)">
+		<form @submit.prevent="createCard()" @keydown.enter="createCard()">
 			<h3>Создание апартамента</h3>
 			<div class="form__control">
 				<input
@@ -94,7 +70,7 @@ const createCard = async (data) => {
 				<input
 					v-model="cardData.square"
 					class="form__input"
-					type="number"
+					type="text"
 					placeholder="Площадь в кв.м"
 				/>
 			</div>
@@ -114,23 +90,8 @@ const createCard = async (data) => {
 					placeholder="Арендная плата"
 				/>
 			</div>
-			<div class="form__control">
-				<input
-					class="form__input"
-					type="file"
-					@change="handleImageUpload"
-				/>
-			</div>
 			<button class="form__btn">Создать</button>
 		</form>
-		<div v-if="cardData.img" class="preview">
-			<h4>Предварительный просмотр изображения:</h4>
-			<img
-				:src="cardData.img"
-				alt="Preview"
-				class="preview__image"
-			/>
-		</div>
 	</div>
 </template>
 

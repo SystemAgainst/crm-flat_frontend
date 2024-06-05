@@ -7,7 +7,7 @@ const routes = [
 		path: '/apartments',
 		alias: '/',
 		name: 'home',
-		component: () => import('@/views/CardList.vue'),
+		component: () => import('@/views/ApartmentList.vue'),
 		meta: {
 			layout: 'main',
 			auth: true,
@@ -16,17 +16,17 @@ const routes = [
 	{
 		path: '/create-apartment',
 		name: 'create',
-		component: () => import('@/views/CardCreate.vue'),
+		component: () => import('@/views/ApartmentCreate.vue'),
 		meta: {
 			layout: 'main',
 			auth: true,
 		},
 	},
 	{
-		path: '/apartment/:id',
+		path: '/apartments/:id',
 		name: 'apartment',
 		props: true,
-		component: () => import('@/views/CardDetail.vue'),
+		component: () => import('@/views/ApartmentDetail.vue'),
 		meta: {
 			layout: 'main',
 			auth: true,

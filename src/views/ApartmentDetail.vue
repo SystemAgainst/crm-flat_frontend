@@ -95,7 +95,6 @@ $sidebar-item-active: #276749;
 	}
 
 	&__data {
-		min-width: fit-content;
 		width: 100%;
 		margin: 0 auto;
 		padding: 2rem;
@@ -103,6 +102,8 @@ $sidebar-item-active: #276749;
 		background-color: #f1f1f1;
 		border-radius: 1rem;
 		box-shadow: 12px 12px 2px 1px rgb(105, 166, 131);
+
+		min-width: 700px;
 	}
 
 	&__title {

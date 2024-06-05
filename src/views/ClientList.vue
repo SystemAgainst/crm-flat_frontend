@@ -48,7 +48,7 @@ onMounted(async () => {
 						<div class="client__price">{{ client.monthlyPayment }} руб/мес + КУ</div>
 					</div>
 					<div class="client__description">День оплаты: каждое {{ client.paymentDay }} число текущего месяца</div>
-					<router-link class="client__btn" :to="`/apartment/${client.apartmentId}`">Квартира проживания →</router-link>
+					<router-link class="client__btn" :to="`/apartments/${client.apartmentId}`">Квартира проживания →</router-link>
 				</div>
 			</article>
 		</template>
