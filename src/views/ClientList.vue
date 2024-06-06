@@ -37,7 +37,7 @@ onMounted(async () => {
 
 		<template v-else>
 			<article
-				class="client__article card_margin"
+				class="client__article client_margin"
 				v-for="client in clients"
 				:key="client.id"
 				:client="client"
