@@ -2,17 +2,35 @@
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/store/authStore.js";
 import { useField, useForm } from "vee-validate";
-import { computed, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import * as yup from "yup";
-import { registerUser } from "@/api/lessor.js";
+import { getAllApartments } from "@/api/apartament.js";
+import VueJwtDecode from 'vue-jwt-decode';
+import { storeToRefs } from "pinia";
+import { createClient } from "@/api/client.js";
 
 
 const store = useAuthStore();
 const router = useRouter();
+const apartments = ref([]);
+
+onMounted(async () => {
+	try {
+		const res = await getAllApartments();
+		apartments.value = res.data.rows;
+	} catch (e) {
+		console.error(e);
+	}
+});
+
+const { token } = storeToRefs(store);
+const decodedUserToken = VueJwtDecode.decode(token.value);
 
 const { handleSubmit, isSubmitting, submitCount } = useForm({
 	initialValues: {
-		role: "RENTER",
+		role: "CLIENT",
+		apartmentId: Number(null),
+		lessorId: decodedUserToken.id,
 	},
 });
 
@@ -74,12 +92,22 @@ const { value: passport_series, errorMessage: psError, handleBlur: psBlur } = us
 		.nonNullable()
 );
 
+const { value: apartmentId, errorMessage: aError } = useField(
+	'apartmentId',
+	yup
+		.number()
+		.required()
+);
+
 const { value: role } = useField('role');
 
 const onSubmit = handleSubmit(async (values) => {
 	try {
-		const response = await registerUser(values);
+		values.apartmentId = Number(values.apartmentId);
+
+		const response = await createClient(values);
 		const refresh_token = response.data.token;
+
 		await store.login(refresh_token);
 		await router.push('/list-renter');
 	} catch (error) {
@@ -140,7 +168,7 @@ watch(isTooManyAttempts, (val) => {
 			<label>
 				<span>Роль</span>
 				<select v-model="role">
-					<option value="RENTER">Съемщик</option>
+					<option value="CLIENT">Съемщик</option>
 				</select>
 			</label>
 		</div>
@@ -158,6 +186,18 @@ watch(isTooManyAttempts, (val) => {
 				<input type="number" v-model="passport_series" @blur="psBlur" />
 			</label>
 			<small v-if="psError">{{ psError }}</small>
+		</div>
+
+		<div class="form-control" :class="{ invalid: aError }">
+			<label>
+				<span>Квартира</span>
+				<select v-model="apartmentId">
+					<option v-for="apartment in apartments" :key="apartment.id" :value="apartment.id">
+						{{ apartment.title }} - {{ apartment.cost }}
+					</option>
+				</select>
+			</label>
+			<small v-if="aError">{{ aError }}</small>
 		</div>
 
 		<button class="btn primary" type="submit" :disabled="isSubmitting || isTooManyAttempts">Создать клиента</button>
