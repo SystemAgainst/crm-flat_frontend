@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { getListClients } from "@/api/lessor.js";
+import { getListClients } from "@/api/client.js";
 
 const clients = ref([]);
 const pending = ref(true);
@@ -44,10 +44,10 @@ onMounted(async () => {
 			>
 				<div class="client__data">
 					<div class="client__data-upper">
-						<div class="client__title">{{ client.fullName }}</div>
-						<div class="client__price">{{ client.monthlyPayment }} руб/мес + КУ</div>
+						<div class="client__title">{{ client.apartment.title }}</div>
+						<div class="client__price">{{ client.apartment.cost }} руб/мес + КУ</div>
 					</div>
-					<div class="client__description">День оплаты: каждое {{ client.paymentDay }} число текущего месяца</div>
+					<div class="client__description">День оплаты: каждое 5 число текущего месяца</div>
 					<router-link class="client__btn" :to="`/apartments/${client.apartmentId}`">Квартира проживания →</router-link>
 				</div>
 			</article>
