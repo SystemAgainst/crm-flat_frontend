@@ -26,7 +26,6 @@ onMounted(async () => {
 				isCardsEmpty.value = false;
 				card.value = res.data;
 			}
-			console.log(res.data);
 		} catch (error) {
 			console.error("Ошибка при получении данных:", error);
 			pending.value = false;
