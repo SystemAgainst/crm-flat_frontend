@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { getApartmentById } from "@/api/apartament.js";
 
 const props = defineProps({
@@ -24,6 +24,7 @@ onMounted(async () => {
 				isCardsEmpty.value = true;
 			} else {
 				isCardsEmpty.value = false;
+				console.log(res.data);
 				card.value = res.data;
 			}
 		} catch (error) {
@@ -32,6 +33,13 @@ onMounted(async () => {
 			isCardsEmpty.value = true;
 		}
 	}, 500);
+});
+
+const paymentStatus = computed(() => {
+	if (card.value && card.value.payment) {
+		return card.value.payment.status ? "Оплачено" : "Не оплачено";
+	}
+	return "";
 });
 </script>
 
@@ -65,18 +73,20 @@ onMounted(async () => {
 				</div>
 				<h3 class="detail__subtitle">Статус оплаты</h3>
 				<div class="detail__description">
-					<label>
-						<select v-model="paymentStatus">
-							<option value="PAID">Оплачено</option>
-							<option value="NOT_PAID">Не оплачено</option>
-						</select>
-					</label>
+					{{ paymentStatus }}
 				</div>
+<!--				<div class="detail__description">-->
+<!--					<label>-->
+<!--						<select v-model="paymentStatus">-->
+<!--							<option value="TRUE">Оплачено</option>-->
+<!--							<option value="FALSE">Не оплачено</option>-->
+<!--						</select>-->
+<!--					</label>-->
+<!--				</div>-->
 			</div>
 		</template>
 	</div>
 </template>
-
 
 <style scoped lang="scss">
 $sidebar-bg-color: #2f855a;
