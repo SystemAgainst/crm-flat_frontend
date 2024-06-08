@@ -97,6 +97,16 @@ const routes = [
 			auth: true,
 		},
 	},
+	{
+		path: '/client/main',
+		alias: '/client/main',
+		name: 'MainClientRolePage',
+		component: () => import('@/views/ClientRole/MainClientRolePage.vue'),
+		meta: {
+			layout: 'client',
+			auth: true,
+		},
+	}
 ];
 
 const router = createRouter({
@@ -111,16 +121,17 @@ router.beforeEach((to, from, next) => {
 
 	const isRequireAuth = to.meta.auth;
 
-	switch (true) {
-		case isRequireAuth && store.isAuthenticate:
+	if (isRequireAuth && !store.isAuthenticate) {
+		next('/auth?message=auth');
+	} else if (isRequireAuth && store.isAuthenticate) {
+		const userRole = store.getRole;
+		if (userRole === 'CLIENT' && to.path !== '/client/main') {
+			next('/client/main');
+		} else {
 			next();
-			break;
-		case isRequireAuth && !store.isAuthenticate:
-			next('/auth?message=auth');
-			break;
-		default:
-			next();
-			break;
+		}
+	} else {
+		next();
 	}
 });
 
