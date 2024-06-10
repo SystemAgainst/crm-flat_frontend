@@ -29,7 +29,7 @@ onMounted(async () => {
 
 <template>
 	<div class="client">
-		<h2 class="title">Клиенты</h2>
+		<h2 class="title">Ваш актив</h2>
 
 		<div v-if="pending">Загрузка...</div>
 

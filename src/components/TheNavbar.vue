@@ -1,5 +1,8 @@
 <script setup>
+import { useAuthStore } from "@/store/authStore.js";
 
+
+const store = useAuthStore();
 </script>
 
 <template>
@@ -14,6 +17,9 @@
 			</li>
 			<li>
 				<router-link to="/docs">Документы</router-link>
+			</li>
+			<li>
+				<a href="#" @click="store.logout()">Выход</a>
 			</li>
 		</ul>
 	</nav>
