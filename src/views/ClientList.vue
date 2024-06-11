@@ -10,12 +10,12 @@ onMounted(async () => {
 	setTimeout(async () => {
 		try {
 			const res = await getListClients();
-			console.log(res.data.rows);
 			pending.value = false;
-			if (res.data.count <= 0) {
+			if (res.data.count === 0) {
 				isCardsEmpty.value = true;
 			} else {
 				isCardsEmpty.value = false;
+				console.log(res.data.rows);
 				clients.value = res.data.rows;
 			}
 		} catch (error) {
@@ -33,7 +33,7 @@ onMounted(async () => {
 
 		<div v-if="pending">Загрузка...</div>
 
-		<div v-else-if="isCardsEmpty">Данных пока нет</div>
+		<div v-else-if="isCardsEmpty === true">Данных пока нет</div>
 
 		<template v-else>
 			<article
@@ -44,8 +44,8 @@ onMounted(async () => {
 			>
 				<div class="client__data">
 					<div class="client__data-upper">
-						<div class="client__title">{{ client.apartment.title }}</div>
-						<div class="client__price">{{ client.apartment.cost }} руб/мес + КУ</div>
+						<div class="client__title">{{ client.passport.name }} {{ client.passport.last_name }}</div>
+						<div class="client__price">{{ client.apartment.title }} ({{ client.apartment.cost }} руб/мес + КУ)</div>
 					</div>
 					<div class="client__description">День оплаты: каждое 5 число текущего месяца</div>
 					<router-link class="client__btn" :to="`/apartments/${client.apartmentId}`">Квартира проживания →</router-link>

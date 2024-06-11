@@ -5,7 +5,7 @@ import { useField, useForm } from "vee-validate";
 import { computed, onMounted, ref, watch } from "vue";
 import * as yup from "yup";
 import { getAllApartments } from "@/api/apartament.js";
-import VueJwtDecode from 'vue-jwt-decode';
+import VueJwtDecode from "vue-jwt-decode";
 import { storeToRefs } from "pinia";
 import { createClient } from "@/api/client.js";
 
@@ -39,81 +39,76 @@ const PASSPORT_NUMBER_LENGTH = 4;
 const PASSPORT_SERIES_LENGTH = 6;
 
 const { value: email, errorMessage: eError, handleBlur: eBlur } = useField(
-	'email',
+	"email",
 	yup
 		.string()
 		.email()
 		.trim()
-		.required()
+		.required(),
 );
 
-const {value: password, errorMessage: pError, handleBlur: pBlur} = useField(
-	'password',
+const { value: password, errorMessage: pError, handleBlur: pBlur } = useField(
+	"password",
 	yup
 		.string()
 		.trim()
 		.required()
-		.min(MIN_PASSWORD_LENGTH)
+		.min(MIN_PASSWORD_LENGTH),
 );
 
 const { value: name, errorMessage: nError, handleBlur: nBlur } = useField(
-	'name',
+	"name",
 	yup
 		.string()
 		.trim()
-		.required()
+		.required(),
 );
 
 const { value: last_name, errorMessage: lnError, handleBlur: lnBlur } = useField(
-	'last_name',
+	"last_name",
 	yup
 		.string()
 		.trim()
-		.required()
+		.required(),
 );
 
 const { value: passport_number, errorMessage: pnError, handleBlur: pnBlur } = useField(
-	'passport_number',
+	"passport_number",
 	yup
 		.string()
 		.trim()
 		.required()
 		.length(PASSPORT_NUMBER_LENGTH)
-		.nonNullable()
+		.nonNullable(),
 );
 
 const { value: passport_series, errorMessage: psError, handleBlur: psBlur } = useField(
-	'passport_series',
+	"passport_series",
 	yup
 		.string()
 		.trim()
 		.required()
 		.length(PASSPORT_SERIES_LENGTH)
-		.nonNullable()
+		.nonNullable(),
 );
 
 const { value: apartmentId, errorMessage: aError } = useField(
-	'apartmentId',
+	"apartmentId",
 	yup
 		.number()
-		.required()
+		.required(),
 );
 
-const { value: role } = useField('role');
+const { value: role } = useField("role");
 
 const onSubmit = handleSubmit(async (values) => {
-	try {
-		values.apartmentId = Number(values.apartmentId);
-
-		const response = await createClient(values);
-		const refresh_token = response.data.token;
-
-		await store.login(refresh_token);
-		await router.push('/list-renter');
-	} catch (error) {
-		console.error('Ошибка аутентификации:', error);
-		await router.push('/create-renter');
-	}
+	await createClient(values)
+		.then(() => {
+			router.push({ name: "RenterList" });
+		})
+		.catch((e) => {
+			console.error("Ошибка аутентификации:", e);
+		});
 });
 
 const isTooManyAttempts = computed(() => {
@@ -130,7 +125,7 @@ watch(isTooManyAttempts, (val) => {
 <template>
 	<form class="card" @submit.prevent="onSubmit" @keydown.enter="onSubmit">
 		<h1>
-			<span class="title active">Регистрация</span>
+			<span class="title active">Регистрация клиента</span>
 		</h1>
 
 		<div :class="['form-control', {invalid: eError}]">
@@ -210,10 +205,12 @@ watch(isTooManyAttempts, (val) => {
 <style scoped lang="scss">
 .title {
 	cursor: pointer;
+
 	&.active {
 		font-size: 2.2rem;
 		font-weight: 600;
 	}
+
 	&.inactive {
 		font-size: 2rem;
 		font-weight: 200;
@@ -247,10 +244,10 @@ watch(isTooManyAttempts, (val) => {
 
 .btn:disabled {
 	cursor: not-allowed;
-	opacity: 1!important;
-	background: #eee!important;
-	border-color: #ddd!important;
-	color: #999!important;
+	opacity: 1 !important;
+	background: #eee !important;
+	border-color: #ddd !important;
+	color: #999 !important;
 }
 
 .btn:active {
@@ -269,7 +266,7 @@ watch(isTooManyAttempts, (val) => {
 
 .form-control input,
 .form-control select,
-.form-control textarea{
+.form-control textarea {
 	font-family: Inter, Roboto, Oxygen, Fira Sans, Helvetica Neue, sans-serif;
 	margin: 0;
 	outline: none;
