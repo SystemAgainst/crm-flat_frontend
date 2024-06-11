@@ -12,7 +12,6 @@ const props = defineProps({
 const card = ref();
 const pending = ref(true);
 const isCardsEmpty = ref(false);
-const status = ref("");
 
 onMounted(async () => {
 	setTimeout(async () => {
@@ -41,6 +40,14 @@ const paymentStatus = computed(() => {
 	}
 	return "";
 });
+
+const status = computed(() => {
+	if (card.value && card?.value?.status.statusOccupancy === "FREE") {
+		return "Свободно";
+	}
+
+	return "Занято";
+});
 </script>
 
 
@@ -62,14 +69,15 @@ const paymentStatus = computed(() => {
 				</div>
 				<h3 class="detail__subtitle">Статус квартиры</h3>
 				<div class="detail__description">
-					<label>
-						<select v-model="status">
-							<option value="available">Свободно</option>
-							<option value="booked">Занято</option>
-							<option value="maintenance">Ремонт</option>
-							<option value="unavailable">Не доступно</option>
-						</select>
-					</label>
+					{{ status }}
+<!--					<label>-->
+<!--						<select v-model="status">-->
+<!--							<option value="OCCUPIED">Свободно</option>-->
+<!--							<option value="FREE">Занято</option>-->
+<!--							<option value="maintenance">Ремонт</option>-->
+<!--							<option value="unavailable">Не доступно</option>-->
+<!--						</select>-->
+<!--					</label>-->
 				</div>
 				<h3 class="detail__subtitle">Статус оплаты</h3>
 				<div class="detail__description">
