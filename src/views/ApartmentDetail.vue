@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { getApartmentById } from "@/api/apartament.js";
 
 const props = defineProps({
@@ -12,7 +12,6 @@ const props = defineProps({
 const card = ref();
 const pending = ref(true);
 const isCardsEmpty = ref(false);
-const status = ref("");
 
 onMounted(async () => {
 	setTimeout(async () => {
@@ -24,15 +23,30 @@ onMounted(async () => {
 				isCardsEmpty.value = true;
 			} else {
 				isCardsEmpty.value = false;
+				console.log(res.data);
 				card.value = res.data;
 			}
-			console.log(res.data);
 		} catch (error) {
 			console.error("Ошибка при получении данных:", error);
 			pending.value = false;
 			isCardsEmpty.value = true;
 		}
 	}, 500);
+});
+
+const paymentStatus = computed(() => {
+	if (card.value && card.value.payment) {
+		return card.value.payment.status ? "Оплачено" : "Не оплачено";
+	}
+	return "";
+});
+
+const status = computed(() => {
+	if (card.value && card?.value?.status.statusOccupancy === "FREE") {
+		return "Свободно";
+	}
+
+	return "Занято";
 });
 </script>
 
@@ -55,29 +69,32 @@ onMounted(async () => {
 				</div>
 				<h3 class="detail__subtitle">Статус квартиры</h3>
 				<div class="detail__description">
-					<label>
-						<select v-model="status">
-							<option value="available">Свободно</option>
-							<option value="booked">Занято</option>
-							<option value="maintenance">Ремонт</option>
-							<option value="unavailable">Не доступно</option>
-						</select>
-					</label>
+					{{ status }}
+<!--					<label>-->
+<!--						<select v-model="status">-->
+<!--							<option value="OCCUPIED">Свободно</option>-->
+<!--							<option value="FREE">Занято</option>-->
+<!--							<option value="maintenance">Ремонт</option>-->
+<!--							<option value="unavailable">Не доступно</option>-->
+<!--						</select>-->
+<!--					</label>-->
 				</div>
 				<h3 class="detail__subtitle">Статус оплаты</h3>
 				<div class="detail__description">
-					<label>
-						<select v-model="paymentStatus">
-							<option value="PAID">Оплачено</option>
-							<option value="NOT_PAID">Не оплачено</option>
-						</select>
-					</label>
+					{{ paymentStatus }}
 				</div>
+<!--				<div class="detail__description">-->
+<!--					<label>-->
+<!--						<select v-model="paymentStatus">-->
+<!--							<option value="TRUE">Оплачено</option>-->
+<!--							<option value="FALSE">Не оплачено</option>-->
+<!--						</select>-->
+<!--					</label>-->
+<!--				</div>-->
 			</div>
 		</template>
 	</div>
 </template>
-
 
 <style scoped lang="scss">
 $sidebar-bg-color: #2f855a;
@@ -95,7 +112,6 @@ $sidebar-item-active: #276749;
 	}
 
 	&__data {
-		min-width: fit-content;
 		width: 100%;
 		margin: 0 auto;
 		padding: 2rem;
@@ -103,6 +119,8 @@ $sidebar-item-active: #276749;
 		background-color: #f1f1f1;
 		border-radius: 1rem;
 		box-shadow: 12px 12px 2px 1px rgb(105, 166, 131);
+
+		min-width: 700px;
 	}
 
 	&__title {

@@ -1,29 +1,43 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import { getAllApartments } from "@/api/apartament.js";
+import { computed, onMounted, ref } from "vue";
+import { getAllApartments, removeApartmentById } from "@/api/apartament.js";
 
 const cards = ref([]);
 const pending = ref(true);
-const isCardsEmpty = ref(false);
+const isAnyCard = computed(() => cards.value.length > 0);
 
 onMounted(async () => {
-	setTimeout(async () => {
-		try {
-			const res = await getAllApartments();
-			pending.value = false;
-			if (res.data.rows.length <= 0) {
-				isCardsEmpty.value = true;
-			} else {
-				isCardsEmpty.value = false;
-				cards.value = res.data.rows;
-			}
-		} catch (error) {
-			console.error("Ошибка при получении данных:", error);
-			pending.value = false;
-			isCardsEmpty.value = true;
-		}
-	}, 300);
+	fetchAllApartments();
 });
+
+const fetchAllApartments = () => {
+	pending.value = true;
+
+	getAllApartments()
+		.then((res) => {
+			cards.value = res.data?.rows;
+	})
+		.catch((e) => {
+		console.error("Ошибка при получении данных:", e);
+	})
+		.finally(() => {
+		pending.value = false;
+	});
+};
+
+const deleteCard = (id) => {
+	pending.value = true;
+	removeApartmentById(id)
+		.then(() => {
+			fetchAllApartments();
+		})
+		.catch((e) => {
+			console.error(e);
+		})
+		.finally(() => {
+			pending.value = false;
+		});
+};
 </script>
 
 <template>
@@ -32,7 +46,7 @@ onMounted(async () => {
 
 		<div v-if="pending">Загрузка...</div>
 
-		<div v-else-if="isCardsEmpty">Данных пока нет</div>
+		<div v-if="!isAnyCard">Данных пока нет</div>
 
 		<template v-else>
 			<article
@@ -41,6 +55,7 @@ onMounted(async () => {
 				:key="card.id"
 				:card="card"
 			>
+				<button class="card__btn_delete" @click="deleteCard(card.id)">×</button>
 				<img class="card__img" src="/static/mockFlatImage.webp" :alt="card.title" />
 
 				<div class="card__data">
@@ -49,7 +64,7 @@ onMounted(async () => {
 						<div class="card__price">{{ card.cost }}</div>
 					</div>
 					<div class="card__description">{{ card.description }}</div>
-					<router-link class="card__btn" :to="`/cards/${card.id}`">Подробнее</router-link>
+					<router-link class="card__btn" :to="`/apartments/${card.id}`">Подробнее</router-link>
 				</div>
 			</article>
 		</template>
@@ -76,6 +91,8 @@ img {
 		display: flex;
 		gap: 2rem;
 
+		position: relative;
+
 		background-color: #efefef;
 		padding: 2rem;
 		border-radius: 2rem;
@@ -101,6 +118,21 @@ img {
 		transition: background-color 0.2s linear;
 		cursor: pointer;
 		border: none;
+
+		&_delete {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			background: none;
+			border: none;
+			font-size: 1.5rem;
+			color: #000;
+			cursor: pointer;
+
+			&:hover {
+				color: $sidebar-bg-color;
+			}
+		}
 
 		&:hover,
 		&:active,

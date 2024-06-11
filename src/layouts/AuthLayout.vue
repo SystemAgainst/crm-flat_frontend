@@ -3,7 +3,7 @@
 </script>
 
 <template>
-	<div class="container with-nav">
+	<div class="container">
 		<router-view />
 	</div>
 </template>

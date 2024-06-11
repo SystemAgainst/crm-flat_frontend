@@ -1,14 +1,10 @@
 <script setup>
-import { useSidebarStore } from "@/store/sidebarStore.js";
 import AppSidebar from "@/components/AppSidebar.vue";
-
-
-const store = useSidebarStore();
 </script>
 
 <template>
 	<AppSidebar />
-	<div class="container" :style="{ 'margin-left': store.sidebarWidth }">
+	<div class="container">
 		<router-view />
 	</div>
 </template>
@@ -20,7 +16,7 @@ $sidebar-item-active: #276749;
 
 .container {
 	max-width: 90%;
-	margin: 0 auto;
 	padding: 0 2rem;
+	margin-left: 300px;
 }
 </style>

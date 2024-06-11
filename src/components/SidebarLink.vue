@@ -73,10 +73,4 @@ $sidebar-item-active: #276749;
 .link.active {
 	background-color: $sidebar-item-hover;
 }
-
-//.link .icon {
-//	flex-shrink: 0;
-//	width: 25px;
-//	margin-right: 10px;
-//}
 </style>

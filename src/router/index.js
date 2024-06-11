@@ -4,10 +4,10 @@ import { useAuthStore } from "@/store/authStore.js";
 
 const routes = [
 	{
-		path: '/cards',
+		path: '/apartments',
 		alias: '/',
 		name: 'home',
-		component: () => import('@/views/CardList.vue'),
+		component: () => import('@/views/ApartmentList.vue'),
 		meta: {
 			layout: 'main',
 			auth: true,
@@ -16,17 +16,17 @@ const routes = [
 	{
 		path: '/create-apartment',
 		name: 'create',
-		component: () => import('@/views/CardCreate.vue'),
+		component: () => import('@/views/ApartmentCreate.vue'),
 		meta: {
 			layout: 'main',
 			auth: true,
 		},
 	},
 	{
-		path: '/cards/:id',
-		name: 'card',
+		path: '/apartments/:id',
+		name: 'apartment',
 		props: true,
-		component: () => import('@/views/CardDetail.vue'),
+		component: () => import('@/views/ApartmentDetail.vue'),
 		meta: {
 			layout: 'main',
 			auth: true,
@@ -97,6 +97,16 @@ const routes = [
 			auth: true,
 		},
 	},
+	{
+		path: '/client/main',
+		alias: '/client/main',
+		name: 'MainClientRolePage',
+		component: () => import('@/views/ClientRole/MainClientRolePage.vue'),
+		meta: {
+			layout: 'client',
+			auth: true,
+		},
+	}
 ];
 
 const router = createRouter({
@@ -111,16 +121,17 @@ router.beforeEach((to, from, next) => {
 
 	const isRequireAuth = to.meta.auth;
 
-	switch (true) {
-		case isRequireAuth && store.isAuthenticate:
+	if (isRequireAuth && !store.isAuthenticate) {
+		next('/auth?message=auth');
+	} else if (isRequireAuth && store.isAuthenticate) {
+		const userRole = store.getRole;
+		if (userRole === 'CLIENT' && to.path !== '/client/main') {
+			next('/client/main');
+		} else {
 			next();
-			break;
-		case isRequireAuth && !store.isAuthenticate:
-			next('/auth?message=auth');
-			break;
-		default:
-			next();
-			break;
+		}
+	} else {
+		next();
 	}
 });
 

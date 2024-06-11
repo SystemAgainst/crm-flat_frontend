@@ -1,52 +1,39 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import { deleteClientById, getListClients } from "@/api/client.js";
-import { removeApartmentById } from "@/api/apartament.js";
+import { onMounted, ref } from "vue";
+import { getListClients } from "@/api/client.js";
 
 const clients = ref([]);
 const pending = ref(true);
-const isAnyCard =  computed(() => clients.value.length > 0);
+const isCardsEmpty = ref(false);
 
-const fetchAllClients = () => {
-	pending.value = true;
-	getListClients()
-		.then((res) => {
-			clients.value = res.data.rows;
-		})
-		.catch((e) => {
-			console.error("Ошибка при получении данных:", e);
-		})
-		.finally(() => {
+onMounted(async () => {
+	setTimeout(async () => {
+		try {
+			const res = await getListClients();
+			console.log(res.data.rows);
 			pending.value = false;
-		});
-};
-
-const deleteClient = (id) => {
-	pending.value = true;
-	deleteClientById(id)
-		.then(() => {
-			fetchAllClients();
-		})
-		.catch((e) => {
-			console.error(e);
-		})
-		.finally(() => {
+			if (res.data.count <= 0) {
+				isCardsEmpty.value = true;
+			} else {
+				isCardsEmpty.value = false;
+				clients.value = res.data.rows;
+			}
+		} catch (error) {
+			console.error("Ошибка при получении данных:", error);
 			pending.value = false;
-		});
-};
-
-onMounted( () => {
-	fetchAllClients();
+			isCardsEmpty.value = true;
+		}
+	}, 300);
 });
 </script>
 
 <template>
 	<div class="client">
-		<h2 class="title">Клиенты</h2>
+		<h2 class="title">Ваш актив</h2>
 
 		<div v-if="pending">Загрузка...</div>
 
-		<div v-else-if="!isAnyCard">Данных пока нет</div>
+		<div v-else-if="isCardsEmpty">Данных пока нет</div>
 
 		<template v-else>
 			<article
@@ -55,11 +42,10 @@ onMounted( () => {
 				:key="client.id"
 				:client="client"
 			>
-				<button class="delete-btn" @click="deleteClient(client.id)">×</button>
 				<div class="client__data">
 					<div class="client__data-upper">
-						<div class="client__title">{{ client.passport.name }} {{ client.passport.last_name }}</div>
-						<div class="client__price">{{ client.apartment.title }} ({{ client.apartment.cost }} руб/мес + КУ)</div>
+						<div class="client__title">{{ client.apartment.title }}</div>
+						<div class="client__price">{{ client.apartment.cost }} руб/мес + КУ</div>
 					</div>
 					<div class="client__description">День оплаты: каждое 5 число текущего месяца</div>
 					<router-link class="client__btn" :to="`/apartments/${client.apartmentId}`">Квартира проживания →</router-link>
@@ -88,7 +74,6 @@ img {
 	&__article {
 		display: flex;
 		gap: 2rem;
-		position: relative;
 
 		background-color: #efefef;
 		padding: 2rem;
@@ -118,7 +103,6 @@ img {
 
 	&__price {
 		font-size: 1.25rem;
-		text-space: 1px;
 		font-weight: 500;
 	}
 
@@ -128,21 +112,6 @@ img {
 
 	&_margin {
 		margin-bottom: 2rem;
-	}
-}
-
-.delete-btn {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	background: none;
-	border: none;
-	font-size: 1.5rem;
-	color: #000;
-	cursor: pointer;
-
-	&:hover {
-		color: $sidebar-bg-color;
 	}
 }
 </style>
