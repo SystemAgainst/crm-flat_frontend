@@ -8,4 +8,6 @@ export const createClient = (payload) => instance.post(`client/add`, {
 	apartmentId: +payload.apartmentId,
 });
 
+export const deleteClientById = (id) => instance.remove(`client/${id}`);
+
 export const getListClients = () => instance.get(`client/list`);

@@ -13,18 +13,21 @@ onMounted(async () => {
 const fetchAllApartments = () => {
 	pending.value = true;
 
-	getAllApartments().then((res) => {
-		cards.value = res.data?.rows;
-	}).catch((e) => {
+	getAllApartments()
+		.then((res) => {
+			cards.value = res.data?.rows;
+	})
+		.catch((e) => {
 		console.error("Ошибка при получении данных:", e);
-	}).finally(() => {
+	})
+		.finally(() => {
 		pending.value = false;
 	});
 };
 
-const deleteCard = async (id) => {
+const deleteCard = (id) => {
 	pending.value = true;
-	await removeApartmentById(id)
+	removeApartmentById(id)
 		.then(() => {
 			fetchAllApartments();
 		})

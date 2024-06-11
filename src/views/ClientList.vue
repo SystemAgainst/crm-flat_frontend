@@ -1,29 +1,42 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import { getListClients } from "@/api/client.js";
+import { computed, onMounted, ref } from "vue";
+import { deleteClientById, getListClients } from "@/api/client.js";
+import { removeApartmentById } from "@/api/apartament.js";
 
 const clients = ref([]);
 const pending = ref(true);
-const isCardsEmpty = ref(false);
+const isAnyCard =  computed(() => clients.value.length > 0);
 
-onMounted(async () => {
-	setTimeout(async () => {
-		try {
-			const res = await getListClients();
+const fetchAllClients = () => {
+	pending.value = true;
+	getListClients()
+		.then((res) => {
+			clients.value = res.data.rows;
+		})
+		.catch((e) => {
+			console.error("Ошибка при получении данных:", e);
+		})
+		.finally(() => {
 			pending.value = false;
-			if (res.data.count === 0) {
-				isCardsEmpty.value = true;
-			} else {
-				isCardsEmpty.value = false;
-				console.log(res.data.rows);
-				clients.value = res.data.rows;
-			}
-		} catch (error) {
-			console.error("Ошибка при получении данных:", error);
+		});
+};
+
+const deleteClient = (id) => {
+	pending.value = true;
+	deleteClientById(id)
+		.then(() => {
+			fetchAllClients();
+		})
+		.catch((e) => {
+			console.error(e);
+		})
+		.finally(() => {
 			pending.value = false;
-			isCardsEmpty.value = true;
-		}
-	}, 300);
+		});
+};
+
+onMounted( () => {
+	fetchAllClients();
 });
 </script>
 
@@ -33,7 +46,7 @@ onMounted(async () => {
 
 		<div v-if="pending">Загрузка...</div>
 
-		<div v-else-if="isCardsEmpty === true">Данных пока нет</div>
+		<div v-else-if="!isAnyCard">Данных пока нет</div>
 
 		<template v-else>
 			<article
@@ -42,6 +55,7 @@ onMounted(async () => {
 				:key="client.id"
 				:client="client"
 			>
+				<button class="delete-btn" @click="deleteClient(client.id)">×</button>
 				<div class="client__data">
 					<div class="client__data-upper">
 						<div class="client__title">{{ client.passport.name }} {{ client.passport.last_name }}</div>
@@ -74,6 +88,7 @@ img {
 	&__article {
 		display: flex;
 		gap: 2rem;
+		position: relative;
 
 		background-color: #efefef;
 		padding: 2rem;
@@ -113,6 +128,21 @@ img {
 
 	&_margin {
 		margin-bottom: 2rem;
+	}
+}
+
+.delete-btn {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: none;
+	border: none;
+	font-size: 1.5rem;
+	color: #000;
+	cursor: pointer;
+
+	&:hover {
+		color: $sidebar-bg-color;
 	}
 }
 </style>
