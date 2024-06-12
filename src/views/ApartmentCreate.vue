@@ -19,12 +19,9 @@ const cardData = ref({
 	description: "",
 	address: "",
 	square: "",
-	"room_count": null,
 	cost: null,
 	lessor_id: decodedUserToken.id,
 });
-
-
 
 const createCard = async () => {
 	try	{
@@ -72,14 +69,6 @@ const createCard = async () => {
 					class="form__input"
 					type="text"
 					placeholder="Площадь в кв.м"
-				/>
-			</div>
-			<div class="form__control">
-				<input
-					v-model="cardData.room_count"
-					class="form__input"
-					type="number"
-					placeholder="Кол-во комнат"
 				/>
 			</div>
 			<div class="form__control">
