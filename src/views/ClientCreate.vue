@@ -17,7 +17,7 @@ const apartments = ref([]);
 onMounted(async () => {
 	try {
 		const res = await getAllApartments();
-		apartments.value = res.data.rows;
+		apartments.value = res.data.rows.filter((item) => item.status.statusOccupancy === "FREE");
 	} catch (e) {
 		console.error(e);
 	}
@@ -183,7 +183,7 @@ watch(isTooManyAttempts, (val) => {
 			<small v-if="psError">{{ psError }}</small>
 		</div>
 
-		<div class="form-control" :class="{ invalid: aError }">
+		<div class="form-control" :class="{ invalid: aError }" v-if="apartments.length > 0">
 			<label>
 				<span>Квартира</span>
 				<select v-model="apartmentId">
@@ -194,6 +194,7 @@ watch(isTooManyAttempts, (val) => {
 			</label>
 			<small v-if="aError">{{ aError }}</small>
 		</div>
+		<span v-else style="display: block; margin-bottom: 1rem;">Нет доступных квартир</span>
 
 		<button class="btn primary" type="submit" :disabled="isSubmitting || isTooManyAttempts">Создать клиента</button>
 		<div class="text-danger" v-if="isTooManyAttempts">
