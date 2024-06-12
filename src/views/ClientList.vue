@@ -1,17 +1,18 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { deleteClientById, getListClients } from "@/api/client.js";
-import { removeApartmentById } from "@/api/apartament.js";
 
 const clients = ref([]);
 const pending = ref(true);
 const isAnyCard =  computed(() => clients.value.length > 0);
+const countClient = ref();
 
 const fetchAllClients = () => {
 	pending.value = true;
 	getListClients()
 		.then((res) => {
 			clients.value = res.data.rows;
+			countClient.value = res.data.count;
 		})
 		.catch((e) => {
 			console.error("Ошибка при получении данных:", e);
@@ -41,30 +42,35 @@ onMounted( () => {
 </script>
 
 <template>
-	<div class="client">
+	<div>
 		<h2 class="title">Клиенты</h2>
+		<h3>Количество клиентов:
+			<span>{{ countClient }}</span>
+		</h3>
 
 		<div v-if="pending">Загрузка...</div>
 
 		<div v-else-if="!isAnyCard">Данных пока нет</div>
 
 		<template v-else>
-			<article
-				class="client__article client_margin"
-				v-for="client in clients"
-				:key="client.id"
-				:client="client"
-			>
-				<button class="delete-btn" @click="deleteClient(client.id)">×</button>
-				<div class="client__data">
-					<div class="client__data-upper">
-						<div class="client__title">{{ client.passport.name }} {{ client.passport.last_name }}</div>
-						<div class="client__price">{{ client.apartment.title }} ({{ client.apartment.cost }} руб/мес + КУ)</div>
+			<div class="client">
+				<article
+					class="client__article client_margin"
+					v-for="client in clients"
+					:key="client.id"
+					:client="client"
+				>
+					<button class="delete-btn" @click="deleteClient(client.id)">×</button>
+					<div class="client__data">
+						<div class="client__data-upper">
+							<div class="client__title">{{ client.passport.name }} {{ client.passport.last_name }}</div>
+							<div class="client__price">{{ client.apartment.title }} ({{ client.apartment.cost }} руб/мес + КУ)</div>
+						</div>
+						<div class="client__description">День оплаты: каждое 5 число текущего месяца</div>
+						<router-link class="client__btn" :to="`/apartments/${client.apartmentId}`">Квартира проживания →</router-link>
 					</div>
-					<div class="client__description">День оплаты: каждое 5 число текущего месяца</div>
-					<router-link class="client__btn" :to="`/apartments/${client.apartmentId}`">Квартира проживания →</router-link>
-				</div>
-			</article>
+				</article>
+			</div>
 		</template>
 	</div>
 </template>
