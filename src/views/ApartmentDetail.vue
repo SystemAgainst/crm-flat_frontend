@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import { getApartmentById } from "@/api/apartament.js";
+import { getApartmentById, updateApartmentStatus } from "@/api/apartament.js";
 
 const props = defineProps({
 	id: {
@@ -36,12 +36,26 @@ onMounted(async () => {
 	}, 500);
 });
 
+
+updateApartmentStatus(props.id, { status });
+
 const paymentStatus = computed(() => {
 	if (card.value && card.value.payment) {
 		return card.value.payment.status ? "Оплачено" : "Не оплачено";
 	}
 	return "";
 });
+
+const updateStatus = () => {
+	updateApartmentStatus(props.id, { statusOccupancy: status.value })
+		.then(() => {
+			getApartmentById(props.id);
+		})
+		.catch(error => {
+			console.error("Ошибка при обновлении статуса:", error);
+		});
+};
+
 </script>
 
 
@@ -64,7 +78,7 @@ const paymentStatus = computed(() => {
 				<h3 class="detail__subtitle">Статус квартиры</h3>
 				<div class="detail__description">
 					<label>
-						<select v-model="status">
+						<select v-model="status" @change="updateStatus">
 							<option value="FREE">Свободно</option>
 							<option value="OCCUPIED">Занято</option>
 						</select>
