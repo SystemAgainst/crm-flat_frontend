@@ -1,30 +1,53 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import { getListClients } from "@/api/client.js";
+import { computed, onMounted, ref } from "vue";
+import { getAllApartments, removeApartmentById } from "@/api/apartament.js";
+import { useAuthStore } from "@/store/authStore.js";
 
-const clients = ref([]);
+const cards = ref([]);
+const store = useAuthStore();
+
 const pending = ref(true);
-const isCardsEmpty = ref(false);
+const isAnyCard = computed(() => cards.value.length > 0);
+
+const filteredCards = computed(() => {
+	if (cards.value.length === 0) return cards.value;
+
+	return cards.value.filter((el) => el.client?.id === store.user.id);
+});
 
 onMounted(async () => {
-	setTimeout(async () => {
-		try {
-			const res = await getListClients();
-			console.log(res.data.rows);
-			pending.value = false;
-			if (res.data.count <= 0) {
-				isCardsEmpty.value = true;
-			} else {
-				isCardsEmpty.value = false;
-				clients.value = res.data.rows;
-			}
-		} catch (error) {
-			console.error("Ошибка при получении данных:", error);
-			pending.value = false;
-			isCardsEmpty.value = true;
-		}
-	}, 300);
+	fetchAllApartments();
 });
+
+const fetchAllApartments = () => {
+	pending.value = true;
+
+	getAllApartments()
+		.then((res) => {
+			console.log(res.data);
+			cards.value = res.data?.rows;
+		})
+		.catch((e) => {
+			console.error("Ошибка при получении данных:", e);
+		})
+		.finally(() => {
+			pending.value = false;
+		});
+};
+
+const deleteCard = (id) => {
+	pending.value = true;
+	removeApartmentById(id)
+		.then(() => {
+			fetchAllApartments();
+		})
+		.catch((e) => {
+			console.error(e);
+		})
+		.finally(() => {
+			pending.value = false;
+		});
+};
 </script>
 
 <template>
@@ -33,22 +56,22 @@ onMounted(async () => {
 
 		<div v-if="pending">Загрузка...</div>
 
-		<div v-else-if="isCardsEmpty">Данных пока нет</div>
+		<div v-else-if="!isAnyCard">Данных пока нет</div>
 
 		<template v-else>
 			<article
 				class="client__article client_margin"
-				v-for="client in clients"
-				:key="client.id"
-				:client="client"
+				v-for="card in filteredCards"
+				:key="card.id"
+				:card="card"
 			>
-				<div class="client__data">
-					<div class="client__data-upper">
-						<div class="client__title">{{ client.apartment.title }}</div>
-						<div class="client__price">{{ client.apartment.cost }} руб/мес + КУ</div>
+				<div class="card__data">
+					<div class="card__data-upper">
+						<div class="card__title">{{ card.title }}</div>
+						<div class="card__price">{{ card.cost }} руб/мес + КУ</div>
 					</div>
-					<div class="client__description">День оплаты: каждое 5 число текущего месяца</div>
-					<router-link class="client__btn" :to="`/apartments/${client.apartmentId}`">Квартира проживания →</router-link>
+					<div class="card__description">День оплаты: каждое 5 число текущего месяца</div>
+					<router-link class="card__btn" :to="`/apartments/${card.apartmentId}`">Квартира проживания →</router-link>
 				</div>
 			</article>
 		</template>
