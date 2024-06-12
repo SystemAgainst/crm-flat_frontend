@@ -42,14 +42,6 @@ const paymentStatus = computed(() => {
 	}
 	return "";
 });
-
-// const status = computed(() => {
-// 	if (card.value && card?.value?.status.statusOccupancy === "FREE") {
-// 		return "Свободно";
-// 	}
-//
-// 	return "Занято";
-// });
 </script>
 
 
