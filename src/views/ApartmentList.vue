@@ -4,6 +4,7 @@ import { getAllApartments, removeApartmentById } from "@/api/apartament.js";
 
 const cards = ref([]);
 const pending = ref(true);
+const assets = ref();
 const isAnyCard = computed(() => cards.value.length > 0);
 
 onMounted(async () => {
@@ -16,6 +17,7 @@ const fetchAllApartments = () => {
 	getAllApartments()
 		.then((res) => {
 			cards.value = res.data?.rows;
+			assets.value = res.data.rows.reduce((acc, item) => acc + item.cost, 0);
 	})
 		.catch((e) => {
 		console.error("Ошибка при получении данных:", e);
@@ -41,32 +43,35 @@ const deleteCard = (id) => {
 </script>
 
 <template>
-	<div class="card">
+	<div>
 		<h2 class="title">Ваши активы</h2>
+		<h3>Активов на сумму: <span class="text-span">{{ assets }}</span></h3>
 
 		<div v-if="pending">Загрузка...</div>
 
 		<div v-if="!isAnyCard">Данных пока нет</div>
 
-		<template v-else>
-			<article
-				class="card__article card_margin"
-				v-for="card in cards"
-				:key="card.id"
-				:card="card"
-			>
-				<button class="card__btn_delete" @click="deleteCard(card.id)">×</button>
-				<img class="card__img" src="/static/mockFlatImage.webp" :alt="card.title" />
+		<template class="" v-else>
+			<div class="card">
+				<article
+					class="card__article card_margin"
+					v-for="card in cards"
+					:key="card.id"
+					:card="card"
+				>
+					<button class="card__btn_delete" @click="deleteCard(card.id)">×</button>
+					<img class="card__img" src="/static/mockFlatImage.webp" :alt="card.title" />
 
-				<div class="card__data">
-					<div class="card__data-upper">
-						<div class="card__title">{{ card.title }}</div>
-						<div class="card__price">{{ card.cost }}</div>
+					<div class="card__data">
+						<div class="card__data-upper">
+							<div class="card__title">{{ card.title }}</div>
+							<div class="card__price">{{ card.cost }}</div>
+						</div>
+						<div class="card__description">{{ card.description }}</div>
+						<router-link class="card__btn" :to="`/apartments/${card.id}`">Подробнее</router-link>
 					</div>
-					<div class="card__description">{{ card.description }}</div>
-					<router-link class="card__btn" :to="`/apartments/${card.id}`">Подробнее</router-link>
-				</div>
-			</article>
+				</article>
+			</div>
 		</template>
 	</div>
 </template>
