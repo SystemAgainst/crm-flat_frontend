@@ -44,7 +44,12 @@ const deleteCard = (id) => {
 
 <template>
 	<div>
-		<h2 class="title">Ваши активы</h2>
+		<div class="upper-page">
+			<h2 class="title">Ваши апартаменты</h2>
+			<router-link to="/create-apartment">
+				<button class="btn-add">+ Добавить</button>
+			</router-link>
+		</div>
 		<h3>Активов на сумму: <span class="text-span">{{ assets }}</span></h3>
 
 		<div v-if="pending">Загрузка...</div>

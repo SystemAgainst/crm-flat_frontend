@@ -61,3 +61,24 @@ $sidebar-item-active: #276749;
 .text-span {
 	color: #3eaf7c;
 }
+
+.upper-page {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	width: 1000px;
+}
+
+.btn-add {
+	background-color: #38a169;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 8px;
+	cursor: pointer;
+
+	&:hover {
+		background-color: #298f59;
+	}
+}

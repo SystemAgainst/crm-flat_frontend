@@ -52,7 +52,10 @@ const deleteCard = (id) => {
 
 <template>
 	<div class="client">
-		<h2 class="title">Ваш актив</h2>
+		<div class="upper-page">
+			<h2 class="title">Ваш апартамент</h2>
+			<button>+ Добавить</button>
+		</div>
 
 		<div v-if="pending">Загрузка...</div>
 

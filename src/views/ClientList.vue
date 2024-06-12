@@ -43,7 +43,18 @@ onMounted( () => {
 
 <template>
 	<div>
-		<h2 class="title">Клиенты</h2>
+		<div class="upper-page">
+			<h2 class="title" style="display: flex; gap: 0.5rem">
+				<router-link to="/">
+					<img src="../assets/back.png" alt="back arrow">
+				</router-link>
+				Клиенты
+			</h2>
+			<router-link to="/create-renter">
+				<button class="btn-add">+ Добавить</button>
+			</router-link>
+		</div>
+
 		<h3>Количество клиентов:
 			<span>{{ countClient }}</span>
 		</h3>
