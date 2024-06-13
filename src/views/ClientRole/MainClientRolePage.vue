@@ -24,7 +24,6 @@ const fetchAllApartments = () => {
 
 	getAllApartments()
 		.then((res) => {
-			console.log(res.data.rows);
 			cards.value = res.data?.rows;
 		})
 		.catch((e) => {
@@ -38,10 +37,7 @@ const fetchAllApartments = () => {
 
 <template>
 	<div class="client">
-		<div class="upper-page">
-			<h2 class="title">Ваш апартамент</h2>
-			<button class="btn-add">+ Добавить</button>
-		</div>
+		<h2 class="title">Ваш апартамент</h2>
 
 		<div v-if="pending">Загрузка...</div>
 
