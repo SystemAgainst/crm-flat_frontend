@@ -18,9 +18,6 @@ const store = useAuthStore();
 		<SidebarLink to="/list-renter">
 			Список клиентов
 		</SidebarLink>
-		<SidebarLink to="/docs">
-			Документы
-		</SidebarLink>
 
 		<div
 			class="collapse-icon"
