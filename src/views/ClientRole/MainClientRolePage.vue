@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import { getAllApartments, removeApartmentById } from "@/api/apartament.js";
+import { getAllApartments } from "@/api/apartament.js";
 import { useAuthStore } from "@/store/authStore.js";
 
 const cards = ref([]);
@@ -24,25 +24,11 @@ const fetchAllApartments = () => {
 
 	getAllApartments()
 		.then((res) => {
-			console.log(res.data);
+			console.log(res.data.rows);
 			cards.value = res.data?.rows;
 		})
 		.catch((e) => {
 			console.error("Ошибка при получении данных:", e);
-		})
-		.finally(() => {
-			pending.value = false;
-		});
-};
-
-const deleteCard = (id) => {
-	pending.value = true;
-	removeApartmentById(id)
-		.then(() => {
-			fetchAllApartments();
-		})
-		.catch((e) => {
-			console.error(e);
 		})
 		.finally(() => {
 			pending.value = false;
@@ -54,7 +40,7 @@ const deleteCard = (id) => {
 	<div class="client">
 		<div class="upper-page">
 			<h2 class="title">Ваш апартамент</h2>
-			<button>+ Добавить</button>
+			<button class="btn-add">+ Добавить</button>
 		</div>
 
 		<div v-if="pending">Загрузка...</div>
@@ -68,13 +54,13 @@ const deleteCard = (id) => {
 				:key="card.id"
 				:card="card"
 			>
-				<div class="card__data">
-					<div class="card__data-upper">
-						<div class="card__title">{{ card.title }}</div>
-						<div class="card__price">{{ card.cost }} руб/мес + КУ</div>
+				<div class="client__data">
+					<div class="client__data-upper">
+						<div class="client__title">{{ card.title }}</div>
+						<div class="client__price">{{ card.cost }} руб/мес + КУ</div>
 					</div>
-					<div class="card__description">День оплаты: каждое 5 число текущего месяца</div>
-					<router-link class="card__btn" :to="`/apartments/${card.apartmentId}`">Квартира проживания →</router-link>
+					<div class="client__description">День оплаты: каждое 5 число текущего месяца</div>
+					<router-link class="client__btn" :to="`/client/main/apartment/${card.client.apartmentId}`">Квартира проживания →</router-link>
 				</div>
 			</article>
 		</template>

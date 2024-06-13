@@ -106,7 +106,17 @@ const routes = [
 			layout: 'client',
 			auth: true,
 		},
-	}
+	},
+	{
+		path: '/client/main/apartment/:id',
+		name: 'apartmentByRole',
+		props: true,
+		component: () => import('@/views/ClientRole/ApartmentDetailClientPage.vue'),
+		meta: {
+			layout: 'client',
+			auth: true,
+		},
+	},
 ];
 
 const router = createRouter({
@@ -125,7 +135,7 @@ router.beforeEach((to, from, next) => {
 		next('/auth?message=auth');
 	} else if (isRequireAuth && store.isAuthenticate) {
 		const userRole = store.getRole;
-		if (userRole === 'CLIENT' && to.path !== '/client/main') {
+		if (userRole === 'CLIENT' && !to.path.startsWith('/client/main')) {
 			next('/client/main');
 		} else {
 			next();
