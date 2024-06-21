@@ -34,8 +34,6 @@ export const useAuthStore = defineStore({
 			const decoded = jwtDecode(token);
 			this.role = decoded.role;
 			this.user = JSON.stringify(decoded);
-			console.log(decoded);
-			console.log(JSON.stringify(decoded));
 			localStorage.setItem(ROLE, decoded.role);
 			localStorage.setItem(USER, JSON.stringify(decoded));
 		},

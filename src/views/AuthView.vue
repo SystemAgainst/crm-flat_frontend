@@ -1,5 +1,5 @@
 <script setup>
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useAuthStore } from "@/store/authStore.js";
 import { useField, useForm } from "vee-validate";
 import { computed, watch } from "vue";
@@ -9,8 +9,6 @@ import { loginUser } from "@/api/lessor.js";
 
 const store = useAuthStore();
 const router = useRouter();
-const route = useRoute();
-
 
 const { handleSubmit, isSubmitting, submitCount } = useForm();
 
@@ -60,8 +58,6 @@ watch(isTooManyAttempts, (val) => {
 		setTimeout(() => submitCount.value = 0, 2000);
 	}
 });
-
-// TODO: Вынести заголовок в отдельный ui компонент
 </script>
 
 <template>
